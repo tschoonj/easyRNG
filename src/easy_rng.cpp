@@ -10,8 +10,8 @@ class _easy_rng_base {
 	virtual unsigned long int get() = 0;
 	virtual void set(unsigned long int seed) = 0;
 	virtual double uniform() = 0;
-	//virtual double uniform_pos() = 0;
-	//virtual unsigned long int uniform_int(unsigned long int n) = 0;
+	virtual double uniform_pos() = 0;
+	virtual unsigned long int uniform_int(unsigned long int n) = 0;
 	virtual ~_easy_rng_base() {}
 };
 
@@ -31,6 +31,17 @@ class _easy_rng_tmpl : public _easy_rng_base {
 	}
 	virtual double uniform() {
 		std::uniform_real_distribution<double> dis(0, 1);
+		return dis(rng);
+	}
+	virtual double uniform_pos() {
+		double rv;
+		do {
+			rv = uniform();
+		} while (rv == 0);
+		return rv;
+	}
+	virtual unsigned long int uniform_int(unsigned long int n) {
+		std::uniform_int_distribution<unsigned long int> dis(0, n-1);
 		return dis(rng);
 	}
 };
@@ -84,6 +95,14 @@ extern "C" unsigned long int easy_rng_get (const easy_rng * r) {
 
 extern "C" double easy_rng_uniform (const easy_rng * r) {
 	return r->rng->uniform();
+}
+
+extern "C" double easy_rng_uniform_pos (const easy_rng * r) {
+	return r->rng->uniform_pos();
+}
+
+extern "C" unsigned long int easy_rng_uniform_int (const easy_rng * r, unsigned long int n) {
+	return r->rng->uniform_int(n);
 }
 
 #define ADD_RNG(rng_name) \
