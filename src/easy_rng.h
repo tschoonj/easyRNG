@@ -10,8 +10,11 @@ extern "C" {
 struct _easy_rng;
 typedef struct _easy_rng easy_rng;
 
-struct _easy_rng_type;
-typedef struct _easy_rng_type easy_rng_type;
+typedef struct {
+	const char *name;
+	unsigned long int max;
+	unsigned long int min;
+} easy_rng_type;
 
 easy_rng * easy_rng_alloc (const easy_rng_type * T);
 
@@ -27,16 +30,19 @@ double easy_rng_uniform_pos (const easy_rng * r);
 
 unsigned long int easy_rng_uniform_int (const easy_rng * r, unsigned long int n);
 
-extern const easy_rng_type *minstd_rand0;
-extern const easy_rng_type *minstd_rand;
-extern const easy_rng_type *mt19937;
-extern const easy_rng_type *mt19937_64;
-extern const easy_rng_type *ranlux24_base;
-extern const easy_rng_type *ranlux48_base;
-extern const easy_rng_type *ranlux24;
-extern const easy_rng_type *ranlux48;
-extern const easy_rng_type *knuth_b;
+extern const easy_rng_type *easy_rng_minstd_rand0;
+extern const easy_rng_type *easy_rng_minstd_rand;
+extern const easy_rng_type *easy_rng_mt19937;
+extern const easy_rng_type *easy_rng_mt19937_64;
+extern const easy_rng_type *easy_rng_ranlux24_base;
+extern const easy_rng_type *easy_rng_ranlux48_base;
+extern const easy_rng_type *easy_rng_ranlux24;
+extern const easy_rng_type *easy_rng_ranlux48;
+extern const easy_rng_type *easy_rng_knuth_b;
+extern const easy_rng_type *easy_rng_default;
 
+
+extern unsigned long int easy_rng_default_seed;
 
 
 #ifdef __cplusplus

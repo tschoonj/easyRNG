@@ -55,7 +55,7 @@ case "$host" in
 esac
 AC_SUBST(LDFLAGS_EXTRA)
 
-AC_CONFIG_FILES([Makefile src/Makefile easyRNG.pc])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc])
 AC_CONFIG_HEADERS([config.h])
 
 AC_OUTPUT
