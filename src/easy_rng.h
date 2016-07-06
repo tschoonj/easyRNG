@@ -30,6 +30,20 @@ double easy_rng_uniform_pos (const easy_rng * r);
 
 unsigned long int easy_rng_uniform_int (const easy_rng * r, unsigned long int n);
 
+const char * easy_rng_name (const easy_rng * r);
+
+unsigned long int easy_rng_max (const easy_rng * r);
+
+unsigned long int easy_rng_min (const easy_rng * r);
+
+/*
+void * easy_rng_state (const easy_rng * r);
+
+size_t easy_rng_size (const easy_rng * r);
+*/
+
+const easy_rng_type ** easy_rng_types_setup (void);
+
 extern const easy_rng_type *easy_rng_minstd_rand0;
 extern const easy_rng_type *easy_rng_minstd_rand;
 extern const easy_rng_type *easy_rng_mt19937;

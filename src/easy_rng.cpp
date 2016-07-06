@@ -51,6 +51,40 @@ extern "C" struct _easy_rng {
 	_easy_rng_base *rng;	
 };
 
+#define ADD_RNG(rng_name) \
+	static const easy_rng_type rng_name = { \
+		.name = #rng_name, \
+		.max = std::rng_name::max(), \
+		.min = std::rng_name::min(), \
+	}; \
+	const easy_rng_type *easy_rng_ ## rng_name = &rng_name;
+
+ADD_RNG(minstd_rand0)
+ADD_RNG(minstd_rand)
+ADD_RNG(mt19937)
+ADD_RNG(mt19937_64)
+ADD_RNG(ranlux24_base)
+ADD_RNG(ranlux48_base)
+ADD_RNG(ranlux24)
+ADD_RNG(ranlux48)
+ADD_RNG(knuth_b)
+
+const easy_rng_type *easy_rng_default = &mt19937;
+unsigned long int easy_rng_default_seed = 0;
+
+const easy_rng_type *all_types[10] = {
+	easy_rng_minstd_rand0,
+	easy_rng_minstd_rand,
+	easy_rng_mt19937,
+	easy_rng_mt19937_64,
+	easy_rng_ranlux24_base,
+	easy_rng_ranlux48_base,
+	easy_rng_ranlux24,
+	easy_rng_ranlux48,
+	easy_rng_knuth_b,
+	nullptr
+};
+
 #define IF_RNG(rng_name) if (T == easy_rng_ ## rng_name) {\
 	rng = new _easy_rng_tmpl<std::rng_name>(); \
 	}
@@ -75,6 +109,7 @@ extern "C" easy_rng * easy_rng_alloc (const easy_rng_type * T) {
 	}
 	rv = (easy_rng *) malloc(sizeof(struct _easy_rng));
 	rv->rng = rng;
+	rv->type = T;
 	rng->set(easy_rng_default_seed);
 
 	return rv;
@@ -105,24 +140,19 @@ extern "C" unsigned long int easy_rng_uniform_int (const easy_rng * r, unsigned 
 	return r->rng->uniform_int(n);
 }
 
-#define ADD_RNG(rng_name) \
-	static const easy_rng_type rng_name = { \
-		.name = #rng_name, \
-		.max = std::rng_name::max(), \
-		.min = std::rng_name::min(), \
-	}; \
-	const easy_rng_type *easy_rng_ ## rng_name = &rng_name;
+extern "C" const char * easy_rng_name (const easy_rng * r) {
+	return r->type->name;
+}
 
-ADD_RNG(minstd_rand0)
-ADD_RNG(minstd_rand)
-ADD_RNG(mt19937)
-ADD_RNG(mt19937_64)
-ADD_RNG(ranlux24_base)
-ADD_RNG(ranlux48_base)
-ADD_RNG(ranlux24)
-ADD_RNG(ranlux48)
-ADD_RNG(knuth_b)
+extern "C" unsigned long int easy_rng_max (const easy_rng * r) {
+	return r->type->max;
+}
 
-const easy_rng_type *easy_rng_default = &mt19937;
-unsigned long int easy_rng_default_seed = 0;
+extern "C" unsigned long int easy_rng_min (const easy_rng * r) {
+	return r->type->min;
+}
+
+extern "C" const easy_rng_type ** easy_rng_types_setup (void) {
+	return all_types;
+}
 
