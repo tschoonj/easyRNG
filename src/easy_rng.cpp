@@ -1,5 +1,7 @@
 #include "easy_rng.h"
 #include <string>
+#include <sstream>
+#include <fstream>
 #include <iostream>
 #include <random>
 #include <cstdlib>
@@ -13,6 +15,9 @@ class _easy_rng_base {
 	virtual double uniform_pos() = 0;
 	virtual unsigned long int uniform_int(unsigned long int n) = 0;
 	virtual ~_easy_rng_base() {}
+	virtual void print(std::ostream &out) = 0;
+	virtual void scan(std::istream &in) = 0;
+	virtual bool equal(_easy_rng_base &sec) = 0;
 };
 
 template<class _easy_rng_cxx11>
@@ -20,6 +25,15 @@ class _easy_rng_tmpl : public _easy_rng_base {
 	private:
 	_easy_rng_cxx11 rng;
 	public:
+	virtual void print(std::ostream &out) {
+		out << rng;
+	}
+	virtual void scan(std::istream &in) {
+		in >> rng;
+	}
+	virtual bool equal(_easy_rng_base &sec) {
+		return rng == dynamic_cast<_easy_rng_tmpl &>(sec).rng;
+	}
 	virtual unsigned long int get() {
 		auto rv = rng();
 		//std::cout << "sizeof(rv): " << sizeof(rv) << std::endl;
@@ -156,3 +170,69 @@ extern "C" const easy_rng_type ** easy_rng_types_setup (void) {
 	return all_types;
 }
 
+extern "C" const easy_rng_type * easy_rng_env_setup (void) {
+	// TODO
+	return nullptr;
+}
+
+extern "C" int easy_rng_memcpy (easy_rng * dest, const easy_rng * src) {
+	if (dest->type != src->type) {
+		std::cerr << "easy_rng_memcpy: dest and src must have the same easy_rng_type" << std::endl;
+		return -1;
+	}
+	// copy the state
+	std::stringstream fout;
+	src->rng->print(fout);
+	dest->rng->scan(fout);
+
+	return 0;
+}
+
+extern "C" easy_rng * easy_rng_clone (const easy_rng * r) {
+	easy_rng *rv = easy_rng_alloc(r->type);
+	easy_rng_memcpy(rv, r);
+
+	return rv;
+}
+
+extern "C" int easy_rng_equal(const easy_rng * ra, const easy_rng *rb) {
+	if (ra->type != rb->type)
+		return 0;
+	if (ra->rng->equal(*(rb->rng)) == true)
+		return 1;
+	else
+		return 0;
+}
+
+extern "C" int easy_rng_fwrite (FILE * stream, const easy_rng * r) {
+	std::ostringstream out;
+	r->rng->print(out);
+	std::string outstr = out.str();
+	size_t length = outstr.length();
+	size_t written = fwrite(&length, sizeof(size_t), 1, stream);
+	if (written != 1)
+		return -1;
+	written = fwrite(outstr.c_str(), sizeof(char), length, stream);
+	if (written != outstr.length())
+		return -1;
+	return 0;
+}
+
+extern "C" int easy_rng_fread (FILE * stream, easy_rng * r) {
+	size_t length;
+	size_t read = fread(&length, sizeof(size_t), 1, stream);
+	if (read != 1)
+		return -1;
+	char *buffer = (char *) malloc(sizeof(char) * (length + 1));
+	read = fread(buffer, sizeof(char), length, stream);
+	if (read != length) {
+		free(buffer);
+		return -1;
+	}
+	buffer[length] = '\0';
+	std::string instr(buffer);
+	std::istringstream in(instr);
+	r->rng->scan(in);
+	free(buffer);
+	return 0;
+}

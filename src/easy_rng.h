@@ -3,6 +3,8 @@
 #ifndef EASY_RNG_H
 #define EASY_RNG_H
 
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,13 +38,26 @@ unsigned long int easy_rng_max (const easy_rng * r);
 
 unsigned long int easy_rng_min (const easy_rng * r);
 
-/*
+/* Not going to happen...
 void * easy_rng_state (const easy_rng * r);
 
 size_t easy_rng_size (const easy_rng * r);
 */
 
 const easy_rng_type ** easy_rng_types_setup (void);
+
+// TODO
+const easy_rng_type * easy_rng_env_setup (void);
+
+int easy_rng_memcpy (easy_rng * dest, const easy_rng * src);
+
+easy_rng * easy_rng_clone (const easy_rng * r);
+
+int easy_rng_equal(const easy_rng * ra, const easy_rng *rb);
+
+int easy_rng_fwrite (FILE * stream, const easy_rng * r);
+
+int easy_rng_fread (FILE * stream, easy_rng * r);
 
 extern const easy_rng_type *easy_rng_minstd_rand0;
 extern const easy_rng_type *easy_rng_minstd_rand;
