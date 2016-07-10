@@ -68,8 +68,8 @@ extern "C" struct _easy_rng {
 #define ADD_RNG(rng_name) \
 	static const easy_rng_type rng_name = { \
 		.name = #rng_name, \
-		.max = std::rng_name::max(), \
-		.min = std::rng_name::min(), \
+		.max = static_cast<unsigned long int>(std::rng_name::max()), \
+		.min = static_cast<unsigned long int>(std::rng_name::min()), \
 	}; \
 	const easy_rng_type *easy_rng_ ## rng_name = &rng_name;
 
