@@ -1,17 +1,37 @@
 sudo: required
 dist: trusty
 
-compiler:
-  - gcc
-  - clang
-
-os:
-  - linux
-  - osx
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - clang
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000'
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - gfortran-5
+      env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000'
+    - os: osx
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000'
+    - os: osx
+      env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' COMPILERS='gcc5'
+    - os: osx
+      env: CC='gcc-6' CXX='g++-6' FC='gfortran-6' CFLAGS='-DNRUNS=100000000' COMPILERS='gcc6'
 
 before_install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update && sudo apt-get install -y libgsl0-dev ; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install gsl ; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get --yes --force-yes update && sudo apt-get --yes --force-yes install libgsl0-dev ; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install homebrew/versions/${COMPILERS} gsl ; fi
+
 
 script:
   - autoreconf -fi
@@ -19,6 +39,10 @@ script:
   - make
   - make check
   - make distcheck
+
+branches:
+  only:
+    - master
 
 notifications:
   email:

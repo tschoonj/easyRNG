@@ -2,7 +2,9 @@
 #include <easy_rng.h>
 #include <time.h>
 
+#ifndef NRUNS
 #define NRUNS 1000000000
+#endif
 
 void run_test(const gsl_rng_type *gtype, const easy_rng_type *etype) {
 	gsl_rng *grng = gsl_rng_alloc(gtype);
