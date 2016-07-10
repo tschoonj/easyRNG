@@ -22,15 +22,8 @@ build_script:
     - cd %APPVEYOR_BUILD_FOLDER%
     - echo %cd%
     - dir
-    - bash -lc "cd $APPVEYOR_BUILD_FOLDER && exec 0</dev/null && autoreconf -fi && ./configure && make"
+    - bash -lc "cd $APPVEYOR_BUILD_FOLDER && exec 0</dev/null && autoreconf -fi && ./configure && make && make check && make distcheck"
     #- perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
     #- bash -lc "./configure && make && make check && make distcheck"
 
-notifications:
-  - provider: Email
-    to:
-      - Tom.Schoonjans@me.com
-    on_build_success: false
-    on_build_failure: true
-    on_build_status_changed: false
 
