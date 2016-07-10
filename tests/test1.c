@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
 	int i;
 	const easy_rng_type **all_types = easy_rng_types_setup();
 	fprintf(stdout, "All available RNGs:\n");
-	for (int i = 0 ; all_types[i] != NULL ; i++) {
+	for (i = 0 ; all_types[i] != NULL ; i++) {
 		fprintf(stdout, "\tname %i: %s\n", i, all_types[i]->name);
 
 		easy_rng *rng = easy_rng_alloc(all_types[i]);

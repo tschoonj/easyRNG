@@ -55,6 +55,20 @@ case "$host" in
 esac
 AC_SUBST(LDFLAGS_EXTRA)
 
+#initialize pkg-config
+PKG_PROG_PKG_CONFIG
+
+GSL_FOUND=no
+PKG_CHECK_MODULES([gsl],gsl >= 1.13, [
+	#GSL found
+	AC_DEFINE([HAVE_GSL], [], [GSL found])
+	GSL_FOUND=yes
+], [
+	GSL_FOUND=no
+])
+AM_CONDITIONAL([ENABLE_GSL_TEST],[test "x$GSL_FOUND" = xyes])
+
+
 AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc])
 AC_CONFIG_HEADERS([config.h])
 
