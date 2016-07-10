@@ -1,0 +1,33 @@
+sudo: required
+dist: trusty
+
+compiler:
+  - gcc
+  - clang
+
+os:
+  - linux
+  - osx
+
+env:
+  global:
+    - LD_LIBRARY_PATH=/usr/local/lib
+    - LD_RUN_PATH=/usr/local/lib
+
+before_install:
+  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update && sudo apt-get install libgsl0-dev ; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install gsl ; fi
+
+script:
+  - autoreconf -fi
+  - ./configure LDFLAGS="-Wl,-rpath -Wl,/usr/local/lib"
+  - make
+  - make check
+  - make distcheck
+
+notifications:
+  email:
+    recipients:
+      - Tom.Schoonjans@me.com
+    on_success: never
+    on_failure: always
