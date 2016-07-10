@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 		easy_rng_fread(file, rng_clone);
 		fclose(file);
 		assert(easy_rng_equal(rng, rng_clone));
-		unlink("file.txt");	
+		unlink("test.txt");
 
 		easy_rng_free(rng);
 		easy_rng_free(rng_clone);
