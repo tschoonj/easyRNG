@@ -2,6 +2,8 @@
 #include <easy_rng.h>
 #include <time.h>
 
+#define NRUNS 1000000000
+
 void run_test(const gsl_rng_type *gtype, const easy_rng_type *etype) {
 	gsl_rng *grng = gsl_rng_alloc(gtype);
 	easy_rng *erng = easy_rng_alloc(etype);
@@ -12,14 +14,14 @@ void run_test(const gsl_rng_type *gtype, const easy_rng_type *etype) {
 
 	gstart = clock();
 	
-	for (i = 0 ; i < 100000000 ; i++)
+	for (i = 0 ; i < NRUNS ; i++)
 		gsl_rng_get(grng);
 
 	gend = clock();
 
 	estart = clock();
 	
-	for (i = 0 ; i < 100000000 ; i++)
+	for (i = 0 ; i < NRUNS ; i++)
 		easy_rng_get(erng);
 
 	eend = clock();
