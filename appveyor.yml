@@ -22,9 +22,9 @@ build_script:
     - cd %APPVEYOR_BUILD_FOLDER%
     - echo %cd%
     - dir
-    - bash -lc "autoreconf -fi"
-    - perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
-    - bash -lc "./configure && make && make check && make distcheck"
+    - bash -lc "cd $APPVEYOR_BUILD_FOLDER && exec 0</dev/null && autoreconf -fi && ./configure && make"
+    #- perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
+    #- bash -lc "./configure && make && make check && make distcheck"
 
 notifications:
   - provider: Email
