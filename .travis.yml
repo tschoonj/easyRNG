@@ -23,7 +23,7 @@ matrix:
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000'
     - os: osx
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
-    - os: os
+    - os: osx
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc5'
     - os: osx
       env: CC='gcc-6' CXX='g++-6' FC='gfortran-6' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc6'
