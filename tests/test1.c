@@ -31,14 +31,14 @@ int main(int argc, char *argv[]) {
 
 		// check writing state to file and reading it back in
 		FILE *file;
-		if ((file = fopen("test.txt", "w")) == NULL) {
+		if ((file = fopen("test.txt", "wb")) == NULL) {
 			return 1;
 		}
 		easy_rng_fwrite(file, rng);
 		fclose(file);
 
 		rng_clone = easy_rng_alloc(all_types[i]);
-		if ((file = fopen("test.txt", "r")) == NULL) {
+		if ((file = fopen("test.txt", "rb")) == NULL) {
 			return 1;
 		}
 		easy_rng_fread(file, rng_clone);
