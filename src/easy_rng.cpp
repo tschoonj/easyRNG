@@ -1,24 +1,9 @@
-#include "easy_rng.h"
+#include "easy_rng_private.h"
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <iostream>
-#include <random>
 #include <cstdlib>
-
-
-class _easy_rng_base {
-	public:
-	virtual unsigned long int get() = 0;
-	virtual void set(unsigned long int seed) = 0;
-	virtual double uniform() = 0;
-	virtual double uniform_pos() = 0;
-	virtual unsigned long int uniform_int(unsigned long int n) = 0;
-	virtual ~_easy_rng_base() {}
-	virtual void print(std::ostream &out) = 0;
-	virtual void scan(std::istream &in) = 0;
-	virtual bool equal(_easy_rng_base &sec) = 0;
-};
+#include <random>
 
 template<class _easy_rng_cxx11>
 class _easy_rng_tmpl : public _easy_rng_base {
@@ -44,8 +29,7 @@ class _easy_rng_tmpl : public _easy_rng_base {
 		rng.seed(seed);
 	}
 	virtual double uniform() {
-		std::uniform_real_distribution<double> dis(0, 1);
-		return dis(rng);
+		return std::generate_canonical<double,std::numeric_limits<double>::digits>(rng);
 	}
 	virtual double uniform_pos() {
 		double rv;
@@ -58,12 +42,76 @@ class _easy_rng_tmpl : public _easy_rng_base {
 		std::uniform_int_distribution<unsigned long int> dis(0, n-1);
 		return dis(rng);
 	}
+	virtual double gaussian(double sigma) {
+		std::normal_distribution<double> dis(0.0, sigma);
+		return dis(rng);
+	}
+	virtual double exponential(double mu) {
+		std::exponential_distribution<double> dis(mu);
+		return dis(rng);
+	}
+	virtual double cauchy(double a) {
+		std::cauchy_distribution<double> dis(0.0, a);
+		return dis(rng);
+	}
+	virtual double gamma(double a, double b) {
+		std::gamma_distribution<double> dis(a, b);
+		return dis(rng);
+	}
+	virtual double flat(double a, double b) {
+		std::uniform_real_distribution<double> dis(a, b);
+		return dis(rng);
+	}
+	virtual double lognormal(double zeta, double sigma) {
+		std::lognormal_distribution<double> dis(zeta, sigma);
+		return dis(rng);
+	}
+	virtual double chisq(double nu) {
+		std::chi_squared_distribution<double> dis(nu);
+		return dis(rng);
+	}
+	virtual double fdist(double nu1, double nu2) {
+		std::fisher_f_distribution<double> dis(nu1, nu2);
+		return dis(rng);
+	}
+	virtual double tdist(double nu) {
+		std::student_t_distribution<double> dis(nu);
+		return dis(rng);
+	}
+	virtual double weibull(double a, double b) {
+		std::weibull_distribution<double> dis(a, b);
+		return dis(rng);
+	}
+	virtual double gumbel1(double a, double b) {
+		std::extreme_value_distribution<double> dis(a, b);
+		return dis(rng);
+	}
+	virtual size_t discrete(std::discrete_distribution<size_t> &dis) {
+		return dis(rng);
+	}
+	virtual unsigned int poisson(double mu) {
+		std::poisson_distribution<unsigned int> dis(mu);
+		return dis(rng);
+	}
+	virtual unsigned int bernoulli(double p) {
+		std::bernoulli_distribution dis(p);
+		return dis(rng);
+	}
+	virtual unsigned int binomial(double p, unsigned int n) {
+		std::binomial_distribution<unsigned int> dis(n, p);
+		return dis(rng);
+	}
+	virtual unsigned int negative_binomial(double p, unsigned int n) {
+		std::negative_binomial_distribution<unsigned int> dis(n, p);
+		return dis(rng);
+	}
+	virtual unsigned int geometric(double p) {
+		std::geometric_distribution<unsigned int> dis(p);
+		return dis(rng);
+	}
 };
 
-extern "C" struct _easy_rng {
-	const easy_rng_type *type;
-	_easy_rng_base *rng;	
-};
+
 
 #define ADD_RNG(rng_name) \
 	static const easy_rng_type rng_name = { \

@@ -78,5 +78,4 @@ extern unsigned long int easy_rng_default_seed;
 }
 #endif
 
-
 #endif
