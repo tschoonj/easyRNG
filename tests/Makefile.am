@@ -12,6 +12,10 @@ test2_CFLAGS = -I$(top_srcdir)/src $(gsl_CFLAGS)
 test2_LDADD = ../src/libeasyRNG.la $(gsl_LIBS)
 endif
 
+check_PROGRAMS += test3
+test3_SOURCES = test3.c
+test3_CFLAGS = -I$(top_srcdir)/src
+test3_LDADD = ../src/libeasyRNG.la
 
 
 TESTS = $(check_PROGRAMS)

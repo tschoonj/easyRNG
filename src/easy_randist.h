@@ -32,7 +32,8 @@ double easy_ran_tdist (const easy_rng * r, double nu);
 
 double easy_ran_weibull (const easy_rng * r, double a, double b);
 
-double easy_ran_gumbel1 (const easy_rng * r, double a, double b);
+// Thought that std::extreme_value_distribution was matching Gumbel Type 1, but that looks incorrect
+//double easy_ran_gumbel1 (const easy_rng * r, double a, double b);
 
 struct _easy_ran_discrete_t;
 typedef struct _easy_ran_discrete_t easy_ran_discrete_t;

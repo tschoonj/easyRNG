@@ -58,10 +58,10 @@ extern "C" double easy_ran_tdist (const easy_rng * r, double nu) {
 extern "C" double easy_ran_weibull (const easy_rng * r, double a, double b) {
 	return r->rng->weibull(a, b);
 }
-
+/*
 extern "C" double easy_ran_gumbel1 (const easy_rng * r, double a, double b) {
 	return r->rng->gumbel1(a, b);
-}
+}*/
 
 extern "C" struct _easy_ran_discrete_t {
 	std::discrete_distribution<size_t> *dis;

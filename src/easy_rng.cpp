@@ -79,13 +79,13 @@ class _easy_rng_tmpl : public _easy_rng_base {
 		return dis(rng);
 	}
 	virtual double weibull(double a, double b) {
-		std::weibull_distribution<double> dis(a, b);
+		std::weibull_distribution<double> dis(b, a);
 		return dis(rng);
 	}
-	virtual double gumbel1(double a, double b) {
+	/*virtual double gumbel1(double a, double b) {
 		std::extreme_value_distribution<double> dis(a, b);
 		return dis(rng);
-	}
+	}*/
 	virtual size_t discrete(std::discrete_distribution<size_t> &dis) {
 		return dis(rng);
 	}
@@ -107,7 +107,9 @@ class _easy_rng_tmpl : public _easy_rng_base {
 	}
 	virtual unsigned int geometric(double p) {
 		std::geometric_distribution<unsigned int> dis(p);
-		return dis(rng);
+		// the C++11 returns the number of failures before the first success,
+		// while we need the number of trials needed to get one success...
+		return dis(rng) + 1;
 	}
 };
 

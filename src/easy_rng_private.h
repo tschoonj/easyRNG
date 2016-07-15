@@ -26,7 +26,7 @@ class _easy_rng_base {
 	virtual double fdist(double nu1, double nu2) = 0;
 	virtual double tdist(double nu) = 0;
 	virtual double weibull(double a, double b) = 0;
-	virtual double gumbel1(double a, double b) = 0;
+	//virtual double gumbel1(double a, double b) = 0;
 	virtual size_t discrete(std::discrete_distribution<size_t> &dis) = 0;
 	virtual unsigned int poisson(double mu) = 0;
 	virtual unsigned int bernoulli(double p) = 0;

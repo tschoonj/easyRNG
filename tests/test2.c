@@ -3,7 +3,7 @@
 #include <time.h>
 
 #ifndef NRUNS
-#define NRUNS 1000000000
+#define NRUNS 10000000
 #endif
 
 void run_test(const gsl_rng_type *gtype, const easy_rng_type *etype) {
