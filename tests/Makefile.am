@@ -3,19 +3,19 @@ check_PROGRAMS = test1
 
 test1_SOURCES = test1.c
 test1_CFLAGS = -I$(top_srcdir)/src
-test1_LDADD = ../src/libeasyRNG.la
+test1_LDADD = ../src/libeasyRNG.la -lm
 
 if ENABLE_GSL_TEST
 check_PROGRAMS += test2
 test2_SOURCES = test2.c
 test2_CFLAGS = -I$(top_srcdir)/src $(gsl_CFLAGS)
-test2_LDADD = ../src/libeasyRNG.la $(gsl_LIBS)
+test2_LDADD = ../src/libeasyRNG.la $(gsl_LIBS) -lm
 endif
 
 check_PROGRAMS += test3
 test3_SOURCES = test3.c
 test3_CFLAGS = -I$(top_srcdir)/src
-test3_LDADD = ../src/libeasyRNG.la
+test3_LDADD = ../src/libeasyRNG.la -lm
 
 
 TESTS = $(check_PROGRAMS)
