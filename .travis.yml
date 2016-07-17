@@ -30,7 +30,7 @@ matrix:
 
 before_install:
   - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get --yes --force-yes update && sudo apt-get --yes --force-yes install libgsl0-dev ; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install ${BREW} ; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew upgrade && brew install ${BREW} ; fi
 
 
 script:
