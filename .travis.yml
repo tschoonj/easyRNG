@@ -22,6 +22,31 @@ matrix:
             - gfortran-5
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000'
     - os: osx
+      osx_image: beta-xcode6.1
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: beta-xcode6.2
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: beta-xcode6.3
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: xcode6.4
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: xcode7
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: xcode7.1
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: xcode7.2
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: xcode7.3
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: xcode8
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
     - os: osx
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc5'
