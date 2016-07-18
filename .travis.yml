@@ -22,12 +22,6 @@ matrix:
             - gfortran-5
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000'
     - os: osx
-      osx_image: beta-xcode6.1
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
-    - os: osx
-      osx_image: beta-xcode6.2
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
-    - os: osx
       osx_image: beta-xcode6.3
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
     - os: osx
@@ -52,10 +46,17 @@ matrix:
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc5'
     - os: osx
       env: CC='gcc-6' CXX='g++-6' FC='gfortran-6' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc6'
+  allow_failures:
+    - os: osx
+      osx_image: beta-xcode6.1
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      osx_image: beta-xcode6.2
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
 
 before_install:
   - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get --yes --force-yes update && sudo apt-get --yes --force-yes install libgsl0-dev ; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew uninstall --force gcc && brew update && brew upgrade && brew install ${BREW} ; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew uninstall --force gcc carthage && brew update && brew upgrade && brew install ${BREW} ; fi
 
 
 script:
