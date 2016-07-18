@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <random>
+#include <cstring>
 
 template<class _easy_rng_cxx11>
 class _easy_rng_tmpl : public _easy_rng_base {
@@ -221,8 +222,48 @@ extern "C" const easy_rng_type ** easy_rng_types_setup (void) {
 }
 
 extern "C" const easy_rng_type * easy_rng_env_setup (void) {
-	// TODO
-	return nullptr;
+	const char *p = getenv ("EASY_RNG_TYPE");
+
+	if (p != nullptr) {
+		const easy_rng_type **t;
+
+		easy_rng_default = 0;
+
+		for (t = easy_rng_types_setup() ; *t != 0 ; ++t) {
+			if (strcmp (p, (*t)->name) == 0) {
+				easy_rng_default = *t;
+				break;
+			}
+		}
+
+		if (easy_rng_default == 0) {
+			std::cerr << "EASY_RNG_TYPE=" << p << " not recognized" << std::endl;
+			std::cerr << "Valid generator types are:" << std::endl;
+
+			for (t = easy_rng_types_setup(); *t != 0; t++) {
+				std::cerr << (*t)->name << std::endl;
+			}
+			easy_rng_default = easy_rng_mt19937;
+			return nullptr;
+		}
+
+		std::cout << "EASY_RNG_TYPE=" << easy_rng_default->name << std::endl;
+	}
+	else {
+		easy_rng_default = easy_rng_mt19937;
+	}
+
+	p = getenv ("EASY_RNG_SEED");
+	unsigned long int new_seed = 0;
+
+	if (p != nullptr) {
+		new_seed = strtoul(p, 0, 0);
+		std::cout << "EASY_RNG_SEED=" << new_seed << std::endl;
+	}
+
+	easy_rng_default_seed = new_seed;
+
+	return easy_rng_default;
 }
 
 extern "C" int easy_rng_memcpy (easy_rng * dest, const easy_rng * src) {
