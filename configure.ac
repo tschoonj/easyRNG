@@ -55,6 +55,54 @@ case "$host" in
 esac
 AC_SUBST(LDFLAGS_EXTRA)
 
+
+#check for Fortran support
+BUILD_FORTRAN=no
+AC_ARG_ENABLE([fortran], [AS_HELP_STRING([--disable-fortran],[build without the Fortran bindings])],[enable_fortran=$enableval],[enable_fortran=check] )
+
+if test "x$enable_fortran" != xno ; then
+
+	AC_PROG_FC
+	if test -z $FC ; then
+		if test "x$enable_fortran" = xyes ; then
+			AC_MSG_ERROR([Fortran compiler was not found. Specify a compiler with the FC variable])
+		else
+			AC_MSG_WARN([Fortran compiler was not found. Specify a compiler with the FC variable])
+		fi
+	else
+		# check if this is a good enough Fortran compiler
+		#check for target support
+		AC_FC_SRCEXT([F90],[
+			AC_MSG_CHECKING([whether the fortran compiler supports the 2008 feature: c_loc for targeted arrays])
+			AC_LANG_PUSH(Fortran)
+			AC_COMPILE_IFELSE([[
+SUBROUTINE test(c)
+USE, INTRINSIC :: iso_c_binding
+IMPLICIT NONE
+INTEGER(c_size_t), DIMENSION(:), INTENT(inout), TARGET:: c
+TYPE(C_PTR) :: ptr
+
+ptr = C_LOC(c)
+
+ENDSUBROUTINE
+			]], [C_LOC_TARGET=yes], [C_LOC_TARGET=no])
+			AC_LANG_POP(Fortran)
+			AC_MSG_RESULT([$C_LOC_TARGET])
+		])
+
+		if test "x$enable_fortran" = xyes && "x$C_LOC_TARGET" = xno; then
+			AC_MSG_ERROR([Fortran compiler does not support a required feature from the 2008 standard.])
+		elif test "x$enable_fortran" = xauto && "x$C_LOC_TARGET" = xno; then
+			AC_MSG_WARN([Fortran compiler does not support a required feature from the 2008 standard.])
+		else 
+			BUILD_FORTRAN=yes
+			AC_MSG_NOTICE([Building Fortran bindings])
+		fi
+	fi
+
+fi
+AM_CONDITIONAL([ENABLE_FORTRAN],[test "x$BUILD_FORTRAN" = xyes])
+
 #initialize pkg-config
 PKG_PROG_PKG_CONFIG
 

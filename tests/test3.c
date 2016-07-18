@@ -222,7 +222,7 @@ void test_fdist(easy_rng *rng) {
 	fprintf(stdout, "\tmean: %g\n", mean);
 	fprintf(stdout, "\tstddev: %g\n", stddev);
 	double real_stddev = fdist_stddev(nu1, nu2);
-	//fprintf(stdout, "\treal stddev: %g\n", real_stddev);
+	fprintf(stdout, "\treal stddev: %g\n", real_stddev);
 	assert(fabs(mean - nu2/(nu2 - 2)) < 1E-2);
 	assert(fabs(stddev - real_stddev) < 5.0E-1);
 }
