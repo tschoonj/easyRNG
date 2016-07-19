@@ -17,5 +17,11 @@ test3_SOURCES = test3.c
 test3_CFLAGS = -I$(top_srcdir)/src
 test3_LDADD = ../src/libeasyRNG.la -lm
 
+if ENABLE_FORTRAN
+check_PROGRAMS += test4
+test4_SOURCES = test4.F90
+test4_FCFLAGS = -I$(top_builddir)/src
+test4_LDADD = ../src/libeasyRNG.la
+endif
 
 TESTS = $(check_PROGRAMS)
