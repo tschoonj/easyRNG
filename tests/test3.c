@@ -465,4 +465,6 @@ int main(int argc, char *argv[]) {
 	test_geometric(rng);
 
 	easy_rng_free(rng);
+	
+	return 0;
 }
