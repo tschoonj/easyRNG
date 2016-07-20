@@ -17,6 +17,16 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - gcc-4.9
+            - g++-4.9
+            - gfortran-4.9
+      env: CC='gcc-4.9' CXX='g++-4.9' FC='gfortran-4.9' CFLAGS='-DNRUNS=100000000'
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
             - gcc-5
             - g++-5
             - gfortran-5
@@ -42,6 +52,8 @@ matrix:
     - os: osx
       osx_image: xcode8
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+    - os: osx
+      env: CC='gcc-4.9' CXX='g++-4.9' FC='gfortran-4.9' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc49'
     - os: osx
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc5'
     - os: osx
