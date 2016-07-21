@@ -97,6 +97,7 @@ ENDSUBROUTINE
 		else 
 			BUILD_FORTRAN=yes
 			AC_MSG_NOTICE([Building Fortran bindings])
+			AC_FC_LIBRARY_LDFLAGS
 		fi
 	fi
 

@@ -46,7 +46,6 @@ size_t easy_rng_size (const easy_rng * r);
 
 const easy_rng_type ** easy_rng_types_setup (void);
 
-// TODO
 const easy_rng_type * easy_rng_env_setup (void);
 
 int easy_rng_memcpy (easy_rng * dest, const easy_rng * src);

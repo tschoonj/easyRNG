@@ -12,6 +12,7 @@ if ENABLE_FORTRAN
 libeasyRNG_la_SOURCES += easy_rng_f.F90
 nodist_easyRNGinclude_HEADERS = easyrng.mod 
 BUILT_SOURCES = easyrng.mod
+libeasyRNG_la_LIBADD = $(FCLIBS)
 easyrng.mod: libeasyRNG.la
 endif
 
