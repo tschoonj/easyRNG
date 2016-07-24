@@ -343,6 +343,142 @@ ENDFUNCTION easy_rng_equal
 !int easy_rng_fread (FILE * stream, easy_rng * r);
 
 
+!double easy_ran_gaussian (const easy_rng * r, double sigma);
+FUNCTION easy_ran_gaussian(r, sigma) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: sigma
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_gaussian_c(r, sigma) BIND(C, NAME='easy_ran_gaussian') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: sigma
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_gaussian_c
+  ENDINTERFACE
+
+  rv = easy_ran_gaussian_c(r%rng, sigma)
+
+ENDFUNCTION easy_ran_gaussian
+
+!double easy_ran_gaussian_ziggurat (const easy_rng * r, double sigma);
+FUNCTION easy_ran_gaussian_ziggurat(r, sigma) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: sigma
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_gaussian_ziggurat_c(r, sigma) BIND(C, NAME='easy_ran_gaussian_ziggurat') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: sigma
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_gaussian_ziggurat_c
+  ENDINTERFACE
+
+  rv = easy_ran_gaussian_ziggurat_c(r%rng, sigma)
+
+ENDFUNCTION easy_ran_gaussian_ziggurat
+
+!double easy_ran_gaussian_ratio_method (const easy_rng * r, double sigma);
+FUNCTION easy_ran_gaussian_ratio_method(r, sigma) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: sigma
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_gaussian_ratio_method_c(r, sigma) BIND(C, NAME='easy_ran_gaussian_ratio_method') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: sigma
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_gaussian_ratio_method_c
+  ENDINTERFACE
+
+  rv = easy_ran_gaussian_ratio_method_c(r%rng, sigma)
+
+ENDFUNCTION easy_ran_gaussian_ratio_method
+
+!double easy_ran_ugaussian (const easy_rng * r);
+FUNCTION easy_ran_ugaussian(r) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_ugaussian_c(r) BIND(C, NAME='easy_ran_ugaussian') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_ugaussian_c
+  ENDINTERFACE
+
+  rv = easy_ran_ugaussian_c(r%rng)
+
+ENDFUNCTION easy_ran_ugaussian
+
+!double easy_ran_ugaussian_ratio_method (const easy_rng * r);
+FUNCTION easy_ran_ugaussian_ratio_method(r) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_ugaussian_ratio_method_c(r) BIND(C, NAME='easy_ran_ugaussian_ratio_method') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_ugaussian_ratio_method_c
+  ENDINTERFACE
+
+  rv = easy_ran_ugaussian_ratio_method_c(r%rng)
+
+ENDFUNCTION easy_ran_ugaussian_ratio_method
+
+!double easy_ran_exponential (const easy_rng * r, double mu);
+
+!double easy_ran_cauchy (const easy_rng * r, double a);
+
+!double easy_ran_gamma (const easy_rng * r, double a, double b);
+
+!double easy_ran_flat (const easy_rng * r, double a, double b);
+
+!double easy_ran_lognormal (const easy_rng * r, double zeta, double sigma);
+
+!double easy_ran_chisq (const easy_rng * r, double nu);
+
+!double easy_ran_fdist (const easy_rng * r, double nu1, double nu2);
+
+!double easy_ran_tdist (const easy_rng * r, double nu);
+
+!double easy_ran_weibull (const easy_rng * r, double a, double b);
+
+!// Thought that std::extreme_value_distribution was matching Gumbel Type 1, but that looks incorrect
+!//double easy_ran_gumbel1 (const easy_rng * r, double a, double b);
+
+!struct _easy_ran_discrete_t;
+!typedef struct _easy_ran_discrete_t easy_ran_discrete_t;
+
+!easy_ran_discrete_t * easy_ran_discrete_preproc (size_t K, const double * P);
+
+!size_t easy_ran_discrete (const easy_rng * r, const easy_ran_discrete_t * g);
+
+!void easy_ran_discrete_free (easy_ran_discrete_t * g);
+
+!unsigned int easy_ran_poisson (const easy_rng * r, double mu);
+
+!unsigned int easy_ran_bernoulli (const easy_rng * r, double p);
+
+!unsigned int easy_ran_binomial (const easy_rng * r, double p, unsigned int n);
+
+!// C++11 allows only for integer n's, unlike GSL where n is double
+!unsigned int easy_ran_negative_binomial (const easy_rng * r, double p, unsigned int n);
+
+!unsigned int easy_ran_geometric (const easy_rng * r, double p);
 
 
 ENDMODULE easyRNG

@@ -75,10 +75,6 @@ matrix:
     - os: osx
       env: CC='gcc-4.8' CXX='g++-4.8' FC='gfortran-4.8' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc48'
     - os: osx
-      env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc5'
-    - os: osx
-      env: CC='gcc-6' CXX='g++-6' FC='gfortran-6' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc6'
-    - os: osx
       env: CC='gcc-4.9' CXX='g++-4.9' FC='gfortran-4.9' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc49'
     - os: osx
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gsl homebrew/versions/gcc5'
