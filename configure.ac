@@ -58,7 +58,11 @@ AC_SUBST(LDFLAGS_EXTRA)
 
 #check for Fortran support
 BUILD_FORTRAN=no
-AC_ARG_ENABLE([fortran], [AS_HELP_STRING([--disable-fortran],[build without the Fortran bindings])],[enable_fortran=$enableval],[enable_fortran=check] )
+FGSL_FOUND=no
+AC_ARG_ENABLE([fortran], [AS_HELP_STRING([--disable-fortran],[build without the Fortran bindings])],[enable_fortran=$enableval],[enable_fortran=auto] )
+
+#initialize pkg-config
+PKG_PROG_PKG_CONFIG
 
 if test "x$enable_fortran" != xno ; then
 
@@ -89,23 +93,27 @@ ENDSUBROUTINE
 			AC_LANG_POP(Fortran)
 			AC_MSG_RESULT([$C_LOC_TARGET])
 		])
-
-		if test "x$enable_fortran" = xyes && "x$C_LOC_TARGET" = xno; then
+		if test "x$enable_fortran" = xyes && test "x$C_LOC_TARGET" = xno ; then
 			AC_MSG_ERROR([Fortran compiler does not support a required feature from the 2008 standard.])
-		elif test "x$enable_fortran" = xauto && "x$C_LOC_TARGET" = xno; then
+		elif test "x$enable_fortran" = xauto && test "x$C_LOC_TARGET" = xno ; then
 			AC_MSG_WARN([Fortran compiler does not support a required feature from the 2008 standard.])
 		else 
 			BUILD_FORTRAN=yes
 			AC_MSG_NOTICE([Building Fortran bindings])
+			# Add fortran linker flags: necessary since the C++ linker will be used...
 			AC_FC_LIBRARY_LDFLAGS
+			PKG_CHECK_MODULES([fgsl], fgsl >= 1.0.0, [
+				#FGSL found
+				AC_DEFINE([HAVE_FGSL], [], [FGSL found])
+				FGSL_FOUND=yes
+			], [
+				FGSL_FOUND=no
+			])
 		fi
 	fi
 
 fi
 AM_CONDITIONAL([ENABLE_FORTRAN],[test "x$BUILD_FORTRAN" = xyes])
-
-#initialize pkg-config
-PKG_PROG_PKG_CONFIG
 
 GSL_FOUND=no
 PKG_CHECK_MODULES([gsl],gsl >= 1.13, [
@@ -117,6 +125,7 @@ PKG_CHECK_MODULES([gsl],gsl >= 1.13, [
 ])
 AM_CONDITIONAL([ENABLE_GSL_TEST],[test "x$GSL_FOUND" = xyes])
 
+AM_CONDITIONAL([ENABLE_FGSL_TEST],[test "x$FGSL_FOUND" = xyes])
 
 AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc])
 AC_CONFIG_HEADERS([config.h])

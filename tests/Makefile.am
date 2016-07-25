@@ -22,6 +22,14 @@ check_PROGRAMS += test4
 test4_SOURCES = test4.F90
 test4_FCFLAGS = -I$(top_builddir)/src
 test4_LDADD = ../src/libeasyRNG.la
+
+if ENABLE_FGSL_TEST
+check_PROGRAMS += test5
+test5_SOURCES = test5.F90
+test5_FCFLAGS = -I$(top_builddir)/src $(fgsl_CFLAGS)
+test5_LDADD = ../src/libeasyRNG.la $(fgsl_LIBS) -lm
+endif
+
 endif
 
 TESTS = $(check_PROGRAMS)
