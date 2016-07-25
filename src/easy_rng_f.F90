@@ -17,6 +17,11 @@ TYPE :: easy_rng
   TYPE (C_PTR) :: rng
 ENDTYPE easy_rng
 
+TYPE :: easy_ran_discrete_t
+  PRIVATE
+  TYPE (C_PTR) :: ran_discrete_t
+ENDTYPE
+
 TYPE (easy_rng_type), BIND(C, NAME='easy_rng_minstd_rand0') :: easy_rng_minstd_rand0
 TYPE (easy_rng_type), BIND(C, NAME='easy_rng_minstd_rand') :: easy_rng_minstd_rand
 TYPE (easy_rng_type), BIND(C, NAME='easy_rng_mt19937') :: easy_rng_mt19937
@@ -440,45 +445,347 @@ FUNCTION easy_ran_ugaussian_ratio_method(r) RESULT(rv)
 ENDFUNCTION easy_ran_ugaussian_ratio_method
 
 !double easy_ran_exponential (const easy_rng * r, double mu);
+FUNCTION easy_ran_exponential(r, mu) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: mu
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_exponential_c(r, mu) BIND(C, NAME='easy_ran_exponential') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: mu
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_exponential_c
+  ENDINTERFACE
+
+  rv = easy_ran_exponential_c(r%rng, mu)
+
+ENDFUNCTION easy_ran_exponential
 
 !double easy_ran_cauchy (const easy_rng * r, double a);
+FUNCTION easy_ran_cauchy(r, a) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: a
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_cauchy_c(r, a) BIND(C, NAME='easy_ran_cauchy') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: a
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_cauchy_c
+  ENDINTERFACE
+
+  rv = easy_ran_cauchy_c(r%rng, a)
+
+ENDFUNCTION easy_ran_cauchy
 
 !double easy_ran_gamma (const easy_rng * r, double a, double b);
+FUNCTION easy_ran_gamma(r, a, b) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: a, b
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_gamma_c(r, a, b) BIND(C, NAME='easy_ran_gamma') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: a, b
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_gamma_c
+  ENDINTERFACE
+
+  rv = easy_ran_gamma_c(r%rng, a, b)
+
+ENDFUNCTION easy_ran_gamma
 
 !double easy_ran_flat (const easy_rng * r, double a, double b);
+FUNCTION easy_ran_flat(r, a, b) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: a, b
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_flat_c(r, a, b) BIND(C, NAME='easy_ran_flat') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: a, b
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_flat_c
+  ENDINTERFACE
+
+  rv = easy_ran_flat_c(r%rng, a, b)
+
+ENDFUNCTION easy_ran_flat
 
 !double easy_ran_lognormal (const easy_rng * r, double zeta, double sigma);
+FUNCTION easy_ran_lognormal(r, zeta, sigma) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: zeta, sigma
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_lognormal_c(r, zeta, sigma) BIND(C, NAME='easy_ran_lognormal') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: zeta, sigma
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_lognormal_c
+  ENDINTERFACE
+
+  rv = easy_ran_lognormal_c(r%rng, zeta, sigma)
+
+ENDFUNCTION easy_ran_lognormal
 
 !double easy_ran_chisq (const easy_rng * r, double nu);
+FUNCTION easy_ran_chisq(r, nu) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: nu
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_chisq_c(r, nu) BIND(C, NAME='easy_ran_chisq') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: nu
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_chisq_c
+  ENDINTERFACE
+
+  rv = easy_ran_chisq_c(r%rng, nu)
+
+ENDFUNCTION easy_ran_chisq
 
 !double easy_ran_fdist (const easy_rng * r, double nu1, double nu2);
+FUNCTION easy_ran_fdist(r, nu1, nu2) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: nu1, nu2
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_fdist_c(r, nu1, nu2) BIND(C, NAME='easy_ran_fdist') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: nu1, nu2
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_fdist_c
+  ENDINTERFACE
+
+  rv = easy_ran_fdist_c(r%rng, nu1, nu2)
+
+ENDFUNCTION easy_ran_fdist
 
 !double easy_ran_tdist (const easy_rng * r, double nu);
+FUNCTION easy_ran_tdist(r, nu) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: nu
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_tdist_c(r, nu) BIND(C, NAME='easy_ran_tdist') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: nu
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_tdist_c
+  ENDINTERFACE
+
+  rv = easy_ran_tdist_c(r%rng, nu)
+
+ENDFUNCTION easy_ran_tdist
 
 !double easy_ran_weibull (const easy_rng * r, double a, double b);
+FUNCTION easy_ran_weibull(r, a, b) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: a, b
+  REAL (C_DOUBLE) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_weibull_c(r, a, b) BIND(C, NAME='easy_ran_weibull') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: a, b
+      REAL (C_DOUBLE) :: rv
+    ENDFUNCTION easy_ran_weibull_c
+  ENDINTERFACE
+
+  rv = easy_ran_weibull_c(r%rng, a, b)
+
+ENDFUNCTION easy_ran_weibull
 
 !// Thought that std::extreme_value_distribution was matching Gumbel Type 1, but that looks incorrect
 !//double easy_ran_gumbel1 (const easy_rng * r, double a, double b);
 
-!struct _easy_ran_discrete_t;
-!typedef struct _easy_ran_discrete_t easy_ran_discrete_t;
-
 !easy_ran_discrete_t * easy_ran_discrete_preproc (size_t K, const double * P);
+FUNCTION easy_ran_discrete_preproc(K, P) RESULT(rv)
+  INTEGER (C_SIZE_T), INTENT(IN) :: K
+  REAL (C_DOUBLE), INTENT(IN), DIMENSION(:), TARGET :: P
+  TYPE (easy_ran_discrete_t) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_discrete_preproc_c(K, P) BIND(C, NAME='easy_ran_discrete_preproc') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      INTEGER (C_SIZE_T), INTENT(IN), VALUE :: K
+      TYPE (C_PTR), INTENT(IN), VALUE :: P
+      TYPE (C_PTR) :: rv
+    ENDFUNCTION easy_ran_discrete_preproc_c
+  ENDINTERFACE
+
+  rv%ran_discrete_t = easy_ran_discrete_preproc_c(K, C_LOC(P))
+
+ENDFUNCTION easy_ran_discrete_preproc
 
 !size_t easy_ran_discrete (const easy_rng * r, const easy_ran_discrete_t * g);
+FUNCTION easy_ran_discrete(r, g) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  TYPE (easy_ran_discrete_t), INTENT(IN) :: g
+  INTEGER (C_SIZE_T) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_discrete_c(r, g) BIND(C, NAME="easy_ran_discrete") RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), INTENT(IN), VALUE :: r, g
+      INTEGER (C_SIZE_T) :: rv
+    ENDFUNCTION easy_ran_discrete_c
+  ENDINTERFACE
+
+  rv = easy_ran_discrete_c(r%rng, g%ran_discrete_t)
+
+ENDFUNCTION easy_ran_discrete
 
 !void easy_ran_discrete_free (easy_ran_discrete_t * g);
+SUBROUTINE easy_ran_discrete_free(g)
+  TYPE (easy_ran_discrete_t), INTENT(IN) :: g
+
+  INTERFACE
+    SUBROUTINE easy_ran_discrete_free_c(g) BIND(C, NAME="easy_ran_discrete_free")
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), INTENT(IN), VALUE :: g
+    ENDSUBROUTINE easy_ran_discrete_free_c
+  ENDINTERFACE
+
+  CALL easy_ran_discrete_free_c(g%ran_discrete_t)
+
+ENDSUBROUTINE easy_ran_discrete_free
 
 !unsigned int easy_ran_poisson (const easy_rng * r, double mu);
+FUNCTION easy_ran_poisson(r, mu) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: mu
+  INTEGER (C_INT) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_poisson_c(r, mu) BIND(C, NAME='easy_ran_poisson') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: mu
+      INTEGER (C_INT) :: rv
+    ENDFUNCTION easy_ran_poisson_c
+  ENDINTERFACE
+
+  rv = easy_ran_poisson_c(r%rng, mu)
+
+ENDFUNCTION easy_ran_poisson
 
 !unsigned int easy_ran_bernoulli (const easy_rng * r, double p);
+FUNCTION easy_ran_bernoulli(r, p) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: p
+  INTEGER (C_INT) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_bernoulli_c(r, p) BIND(C, NAME='easy_ran_bernoulli') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: p
+      INTEGER (C_INT) :: rv
+    ENDFUNCTION easy_ran_bernoulli_c
+  ENDINTERFACE
+
+  rv = easy_ran_bernoulli_c(r%rng, p)
+
+ENDFUNCTION easy_ran_bernoulli
 
 !unsigned int easy_ran_binomial (const easy_rng * r, double p, unsigned int n);
+FUNCTION easy_ran_binomial(r, p, n) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: p
+  INTEGER (C_INT), INTENT(IN) :: n
+  INTEGER (C_INT) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_binomial_c(r, p, n) BIND(C, NAME='easy_ran_binomial') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: p
+      INTEGER (C_INT), VALUE, INTENT(IN) :: n
+      INTEGER (C_INT) :: rv
+    ENDFUNCTION easy_ran_binomial_c
+  ENDINTERFACE
+
+  rv = easy_ran_binomial_c(r%rng, p, n)
+
+ENDFUNCTION easy_ran_binomial
 
 !// C++11 allows only for integer n's, unlike GSL where n is double
 !unsigned int easy_ran_negative_binomial (const easy_rng * r, double p, unsigned int n);
+FUNCTION easy_ran_negative_binomial(r, p, n) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: p
+  INTEGER (C_INT), INTENT(IN) :: n
+  INTEGER (C_INT) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_negative_binomial_c(r, p, n) BIND(C, NAME='easy_ran_negative_binomial') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: p
+      INTEGER (C_INT), VALUE, INTENT(IN) :: n
+      INTEGER (C_INT) :: rv
+    ENDFUNCTION easy_ran_negative_binomial_c
+  ENDINTERFACE
+
+  rv = easy_ran_negative_binomial_c(r%rng, p, n)
+
+ENDFUNCTION easy_ran_negative_binomial
 
 !unsigned int easy_ran_geometric (const easy_rng * r, double p);
+FUNCTION easy_ran_geometric(r, p) RESULT(rv)
+  TYPE (easy_rng), INTENT(IN) :: r
+  REAL (C_DOUBLE), INTENT(IN) :: p
+  INTEGER (C_INT) :: rv
+
+  INTERFACE
+    FUNCTION easy_ran_geometric_c(r, p) BIND(C, NAME='easy_ran_geometric') RESULT(rv)
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      TYPE (C_PTR), VALUE, INTENT(IN) :: r
+      REAL (C_DOUBLE), VALUE, INTENT(IN) :: p
+      INTEGER (C_INT) :: rv
+    ENDFUNCTION easy_ran_geometric_c
+  ENDINTERFACE
+
+  rv = easy_ran_geometric_c(r%rng, p)
+
+ENDFUNCTION easy_ran_geometric
 
 
 ENDMODULE easyRNG
