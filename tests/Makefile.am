@@ -30,6 +30,10 @@ test5_FCFLAGS = -I$(top_builddir)/src $(fgsl_CFLAGS)
 test5_LDADD = ../src/libeasyRNG.la $(fgsl_LIBS) -lm
 endif
 
+check_PROGRAMS += test6
+test6_SOURCES = test6.F90
+test6_FCFLAGS = -I$(top_builddir)/src
+test6_LDADD = ../src/libeasyRNG.la -lm
 endif
 
 TESTS = $(check_PROGRAMS)
