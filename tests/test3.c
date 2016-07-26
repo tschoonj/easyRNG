@@ -136,7 +136,7 @@ void test_gamma(easy_rng *rng) {
 	fprintf(stdout, "\tmean: %g\n", mean);
 	fprintf(stdout, "\tstddev: %g\n", stddev);
 	assert(fabs(mean - 50.0) < 1E-1);
-	assert(fabs(stddev - sqrt(10.0 * 5.0 *5.0)) < 1E-1);
+	assert(fabs(stddev - sqrt(10.0 * 5.0 * 5.0)) < 1E-1);
 }
 
 void test_flat(easy_rng *rng) {
