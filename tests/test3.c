@@ -255,6 +255,7 @@ double weibull_mean(double a, double b) {
 double weibull_stddev(double a, double b) {
 	return a * sqrt(tgamma(1.0 + 2.0/b) - tgamma(1.0 + 1.0/b) * tgamma(1.0 + 1.0/b));
 }
+
 void test_weibull(easy_rng *rng) {
 	int i;
 	double mean = 0.0, M2 = 0.0;

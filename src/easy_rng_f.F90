@@ -628,8 +628,7 @@ ENDFUNCTION easy_ran_weibull
 !//double easy_ran_gumbel1 (const easy_rng * r, double a, double b);
 
 !easy_ran_discrete_t * easy_ran_discrete_preproc (size_t K, const double * P);
-FUNCTION easy_ran_discrete_preproc(K, P) RESULT(rv)
-  INTEGER (C_SIZE_T), INTENT(IN) :: K
+FUNCTION easy_ran_discrete_preproc(P) RESULT(rv)
   REAL (C_DOUBLE), INTENT(IN), DIMENSION(:), TARGET :: P
   TYPE (easy_ran_discrete_t) :: rv
 
@@ -643,7 +642,7 @@ FUNCTION easy_ran_discrete_preproc(K, P) RESULT(rv)
     ENDFUNCTION easy_ran_discrete_preproc_c
   ENDINTERFACE
 
-  rv%ran_discrete_t = easy_ran_discrete_preproc_c(K, C_LOC(P))
+  rv%ran_discrete_t = easy_ran_discrete_preproc_c(SIZE(P, KIND=C_SIZE_T), C_LOC(P))
 
 ENDFUNCTION easy_ran_discrete_preproc
 
