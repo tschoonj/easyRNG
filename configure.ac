@@ -126,8 +126,15 @@ PKG_CHECK_MODULES([gsl],gsl >= 1.13, [
 AM_CONDITIONAL([ENABLE_GSL_TEST],[test "x$GSL_FOUND" = xyes])
 
 AM_CONDITIONAL([ENABLE_FGSL_TEST],[test "x$FGSL_FOUND" = xyes])
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -z "$DOXYGEN";
+   then AC_MSG_WARN([Doxygen not found - continuing without Doxygen support])
+fi
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([docs/Doxyfile])])
 
-AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc])
+
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc docs/Makefile])
 AC_CONFIG_HEADERS([config.h])
 
 AC_OUTPUT

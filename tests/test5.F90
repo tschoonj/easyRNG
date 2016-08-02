@@ -1,5 +1,5 @@
 #ifndef NRUNS
-#define NRUNS 1000000000
+#define NRUNS 10000000
 #endif
 
 SUBROUTINE run_test(ftype, etype)
