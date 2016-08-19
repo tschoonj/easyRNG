@@ -2,7 +2,7 @@
 
 
 if HAVE_DOXYGEN
-doxyfile.stamp: $(top_srcdir)/src/easy_rng.h $(top_srcdir)/src/easy_randist.h $(top_srcdir)/src/easy_rng_f.F90
+doxyfile.stamp: $(top_srcdir)/src/easy_rng.h $(top_srcdir)/src/easy_randist.h $(top_srcdir)/src/easy_rng_f.F90 $(EXTRA_DIST)
 	$(DOXYGEN) Doxyfile
 	echo Timestamp > doxyfile.stamp
 
@@ -31,3 +31,5 @@ uninstall-local:
 	rm -rf $(DESTDIR)$(easyRNG_docdir)
 
 endif
+
+EXTRA_DIST = DoxygenLayout.xml extra_pages.dox

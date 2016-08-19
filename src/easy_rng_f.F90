@@ -26,6 +26,21 @@
 !OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 !OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+!> \file easy_rng_f.F90
+!!  \brief The random number generator API
+!!  \author Tom Schoonjans
+!!
+!!  This header contains all functions and definitions that are necessary to instantiate a random number generator,
+!!  as well as to obtain uniformly distributed random numbers.
+!!  The API is strongly modelled after the GNU Scientific Library's gsl_rng.h header, with some notable exceptions:
+!!  
+!!  * easy_rng_state() and easy_rng_size() are not implemented as the required information is not accessible in the C++11 templates
+!!  * easy_rng_equal() has been added to compare two random number generators for equality
+!!  * easy_rng_fwrite and easy_rng_fread write a string (ASCII) representation of the state to file, instead of a binary stream.
+!!  * Only 9 types of random number generators are offered here, in accordance with the C++11 standard. The GNU Scientific library offers dozens more. It should be noted though that the GNU Scientific library does not have the 64-bit implementation of the Mersenne-Twister (easy_rng_mt19937_64)
+!!
+!!  \note the description of the different types of random number generators on this page was sourced from [cppreference.com](http://en.cppreference.com/w/cpp/numeric/random). Please consult this website for more information.
+!!
 
 MODULE easyRNG
 

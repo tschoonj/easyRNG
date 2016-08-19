@@ -1,4 +1,4 @@
-AC_INIT([easyRNG],[0.1],[Tom.Schoonjans@me.com])
+AC_INIT([easyRNG],[1.0],[Tom.Schoonjans@me.com],[easyRNG],[https://tschoonj.github.io/easyRNG])
 AC_PREREQ([2.60])
 AC_CONFIG_SRCDIR([src/easy_rng.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -101,7 +101,8 @@ ENDSUBROUTINE
 			BUILD_FORTRAN=yes
 			AC_MSG_NOTICE([Building Fortran bindings])
 			# Add fortran linker flags: necessary since the C++ linker will be used...
-			AC_FC_LIBRARY_LDFLAGS
+			# Not necessary right now: to be added when need arises...
+			#AC_FC_LIBRARY_LDFLAGS
 			PKG_CHECK_MODULES([fgsl], fgsl >= 1.0.0, [
 				#FGSL found
 				AC_DEFINE([HAVE_FGSL], [], [FGSL found])
@@ -134,7 +135,7 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([docs/Doxyfile])])
 
 
-AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc docs/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc docs/Makefile easyRNG.spec])
 AC_CONFIG_HEADERS([config.h])
 
 AC_OUTPUT

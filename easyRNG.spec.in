@@ -1,0 +1,85 @@
+Summary: Random number generators and distributions for C and Fortran
+Name: easyRNG
+Version: @VERSION@
+Release: 1%{?dist}
+License: BSD
+Group: System Environment/Libraries
+Source: http://http://lvserver.ugent.be/easyRNG/easyRNG-%{version}.tar.gz
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+URL: https://tschoonj.github.io/easyRNG
+Requires: libstdc++
+BuildRequires:   libstdc++-devel
+BuildRequires:   gcc-c++
+BuildRequires:   gcc
+BuildRequires:   gcc-gfortran
+BuildRequires:   doxygen graphviz
+
+%description
+easyRNG consists of a wrapper around C++11's random templates, providing random number generators and distributions, with an API modelled after the GNU Scientific Library.
+
+%package devel
+Summary: Random number generators and distributions for C and Fortran: development package
+Group: Development/Libraries
+Requires: %name = %{version}
+Requires: gcc
+Requires: gcc-gfortran
+
+%description devel
+easyRNG consists of a wrapper around C++11's random templates, providing random number generators and distributions, with an API modelled after the GNU Scientific Library.
+
+This package contains the necessary headers and libraries to start developing with easyRNG.
+
+%package doc
+Summary: Random number generators and distributions for C and Fortran: documentation
+Group: Development/Libraries
+Requires: %{name}-devel = %{version}
+
+%description doc
+easyRNG consists of a wrapper around C++11's random templates, providing random number generators and distributions, with an API modelled after the GNU Scientific Library.
+
+This package contains the easyRNG documentation in html format.
+
+%prep
+%setup -q
+
+%build
+%configure
+#necessary to fix rpath issues during rpmbuild
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make DESTDIR=$RPM_BUILD_ROOT install
+libtool --finish $RPM_BUILD_ROOT%{_libdir}
+find $RPM_BUILD_ROOT -name '*.la' | xargs rm -f
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%files
+%defattr(-, root, root)
+%{_libdir}/libeasyRNG*.so.*
+
+%files devel
+%defattr(-, root, root)
+%{_libdir}/*so
+%{_libdir}/*a
+%{_libdir}/pkgconfig/*
+%{_includedir}/*
+
+%files doc
+%defattr(-,root,root,-)
+%{_datadir}/doc/easyRNG/*
+
+
+%changelog
+* Fri Aug 19 2016 Tom Schoonjans <Tom.Schoonjans@me.com>
+- Initial spec file
+
+

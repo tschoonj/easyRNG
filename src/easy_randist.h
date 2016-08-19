@@ -231,6 +231,7 @@ typedef struct _easy_ran_discrete_t easy_ran_discrete_t;
  * \param K The length of the array \c P
  * \param P An array of length \c K, containing the (positive) weights of the events
  * \returns The lookup table. Pass this variable to easy_ran_discrete() to generate discrete random numbers based on the contents of \c P
+ * \warning The Fortran API drops the \c K argument as the size of the P array can be determined from the variable itself.
  */
 easy_ran_discrete_t * easy_ran_discrete_preproc (size_t K, const double * P);
 
