@@ -116,6 +116,8 @@ ENDSUBROUTINE
 fi
 AM_CONDITIONAL([ENABLE_FORTRAN],[test "x$BUILD_FORTRAN" = xyes])
 
+AC_SUBST([with_fortran], [$BUILD_FORTRAN])
+
 GSL_FOUND=no
 PKG_CHECK_MODULES([gsl],gsl >= 1.13, [
 	#GSL found
