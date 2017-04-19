@@ -20,7 +20,7 @@
  * present on your system:
  * - A C++ compiler with full support of the C++11 standard. Compilers known to do the job are recent versions of GCC and clang.
  * - A C compiler (for running `make check`).
- * - Optional: a Fortran compiler with support of the 2003 standard. If not found than the Fortran bindings will not be built.
+ * - Optional: a Fortran compiler with support of the 2003 standard. If not found then the Fortran bindings will not be built.
  * - Optional: GNU Scientific library. When present a test will be run benchmarking easyRNG's C API against GSL.
  * - Optional: Fortran bindings to the GNU Scientific library (FGSL). When present a test will be run benchmarking easyRNG's Fortran API against FGSL.
  *  
@@ -64,30 +64,35 @@
  * Packages were created for Debian and Ubuntu. Currently the following flavors are supported: Debian Jessie and several Ubuntu versions .
  * In order to access these packages using your favorite package manager, execute the following command to import my public key:
  *
- * > `curl http://lvserver.ugent.be/apt/xmi.packages.key | sudo apt-key add -`
+ * > `curl http://xmi-apt.tomschoonjans.eu/xmi.packages.key | sudo apt-key add -`
  *
  * Next, add the package download location corresponding to your distribution to the /etc/apt/sources.list file (as root):
  *
  *
  * Debian Jessie:
  *
- *       deb http://lvserver.ugent.be/apt/debian jessie stable
- *       deb-src http://lvserver.ugent.be/apt/debian jessie stable
+ *       deb http://xmi-apt.tomschoonjans.eu/debian jessie stable
+ *       deb-src http://xmi-apt.tomschoonjans.eu/debian jessie stable
  *
  * Ubuntu Trusty 14.04:
  *
- *       deb [arch=amd64] http://lvserver.ugent.be/apt/ubuntu trusty stable
- *       deb-src http://lvserver.ugent.be/apt/ubuntu trusty stable
- *
- * Ubuntu Wily 15.10:
- *
- *       deb [arch=amd64] http://lvserver.ugent.be/apt/ubuntu wily stable
- *       deb-src http://lvserver.ugent.be/apt/ubuntu wily stable
+ *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu trusty stable
+ *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu trusty stable
  *
  * Ubuntu Xenial 16.04:
  * 
- *       deb [arch=amd64] http://lvserver.ugent.be/apt/ubuntu xenial stable
- *       deb-src http://lvserver.ugent.be/apt/ubuntu xenial stable
+ *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu xenial stable
+ *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu xenial stable
+ *
+ * Ubuntu Yakkety 16.10:
+ *
+ *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu yakkety stable
+ *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu yakkety stable
+ *
+ * Ubuntu Zesty 17.04:
+ *
+ *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu zesty stable
+ *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu zesty stable
  *
  * When the sources.list file contains the correct download locations, update the apt cache by running:
  *
