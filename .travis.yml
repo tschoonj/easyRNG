@@ -61,7 +61,7 @@ matrix:
 #           - gcc-7
 #           - g++-7
 #           - gfortran-7
-      env: CC='gcc-7' CXX='g++-7' FC='gfortran-7' CFLAGS='-DNRUNS=100000000'
+#     env: CC='gcc-7' CXX='g++-7' FC='gfortran-7' CFLAGS='-DNRUNS=100000000'
     - os: osx
       osx_image: xcode6.4
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
