@@ -104,11 +104,12 @@ void test_ugaussian(easy_rng *rng) {
 void test_exponential(easy_rng *rng) {
 	int i;
 	double mean = 0.0, M2 = 0.0;
+	double mu = 5.1047E-05;
 
 	fprintf(stdout, "Testing easy_ran_exponential\n");
 
 	for (i = 0 ; i < NSAMPLES ; i++) {
-		double val = easy_ran_exponential(rng, 10.0);
+		double val = easy_ran_exponential(rng, mu);
 		double delta = val - mean;
 		mean += delta/(i + 1);
 		M2 += delta * (val - mean);
@@ -116,8 +117,8 @@ void test_exponential(easy_rng *rng) {
 	double stddev = sqrt(M2/NSAMPLES);
 	fprintf(stdout, "\tmean: %g\n", mean);
 	fprintf(stdout, "\tstddev: %g\n", stddev);
-	assert(fabs(mean - 1.0/10.0) < 1E-2);
-	assert(fabs(stddev - 1.0/10.0) < 1E-2);
+	assert(fabs(mean - mu)/mean < 1E-2);
+	assert(fabs(stddev - mu)/mean < 1E-2);
 }
 
 void test_gamma(easy_rng *rng) {

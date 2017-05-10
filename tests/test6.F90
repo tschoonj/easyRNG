@@ -231,6 +231,7 @@ IMPLICIT NONE
 TYPE (easy_rng), INTENT(IN) :: rng
 INTEGER :: i
 REAL (C_DOUBLE) :: mean, M2, val, delta, stddev
+REAL (C_DOUBLE), PARAMETER :: mu = 5.1047E-05_C_DOUBLE
 
 mean = 0.0_C_DOUBLE
 M2 = 0.0_C_DOUBLE
@@ -238,7 +239,7 @@ M2 = 0.0_C_DOUBLE
 WRITE (output_unit, '(A)') 'Testing easy_ran_exponential'
 
 DO i=1, NSAMPLES
-  val = easy_ran_exponential(rng, 10.0_C_DOUBLE)
+  val = easy_ran_exponential(rng, mu)
   delta = val - mean
   mean = mean + delta/i
   M2 = M2 + delta * (val - mean)
@@ -246,8 +247,8 @@ ENDDO
 stddev = SQRT(M2/NSAMPLES)
 WRITE (output_unit, '(A,ES10.3)') '      mean: ', mean
 WRITE (output_unit, '(A,ES10.3)') '      stddev: ', stddev
-CALL assert(ABS(mean - 1.0/10.0) < 1E-2, __LINE__)
-CALL assert(ABS(stddev - 1.0/10.0) < 1E-2, __LINE__)
+CALL assert(ABS(mean - mu)/mean < 1E-2, __LINE__)
+CALL assert(ABS(stddev - mu)/mean < 1E-2, __LINE__)
 
 ENDSUBROUTINE test_exponential
 
