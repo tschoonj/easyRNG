@@ -64,28 +64,55 @@ matrix:
 #     env: CC='gcc-7' CXX='g++-7' FC='gfortran-7' CFLAGS='-DNRUNS=100000000'
     - os: osx
       osx_image: xcode6.4
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
     - os: osx
       osx_image: xcode7.3
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
     - os: osx
       osx_image: xcode8.3
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW='gsl'
+      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
     - os: osx
-      env: CC='gcc-4.8' CXX='g++-4.8' FC='gfortran-4.8' CFLAGS='-DNRUNS=100000000' BREW='gsl gcc@4.8'
+      env: CC='gcc-4.8' CXX='g++-4.8' CFLAGS='-DNRUNS=100000000' BREW='gcc@4.8'
     - os: osx
-      env: CC='gcc-4.9' CXX='g++-4.9' FC='gfortran-4.9' CFLAGS='-DNRUNS=100000000' BREW='gsl gcc@4.9'
+      env: CC='gcc-4.9' CXX='g++-4.9' FC='gfortran-4.9' CFLAGS='-DNRUNS=100000000' BREW='gcc@4.9'
     - os: osx
-      env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gsl gcc@5'
+      env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gcc@5'
     - os: osx
-      env: CC='gcc-6' CXX='g++-6' FC='gfortran-6' CFLAGS='-DNRUNS=100000000' BREW='gsl gcc@6'
+      env: CC='gcc-6' CXX='g++-6' FC='gfortran-6' CFLAGS='-DNRUNS=100000000' BREW='gcc@6'
     - os: osx
-      env: CC='gcc-7' CXX='g++-7' FC='gfortran-7' CFLAGS='-DNRUNS=100000000' BREW='gsl gcc@7'
+      env: CC='gcc-7' CXX='g++-7' FC='gfortran-7' CFLAGS='-DNRUNS=100000000' BREW='gcc@7'
+
+env:
+  global:
+    - LD_LIBRARY_PATH=/usr/local/lib
+    - LD_RUN_PATH=/usr/local/lib
+    - PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
 before_install:
   - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get --yes --force-yes update && sudo apt-get --yes --force-yes install libgsl0-dev ; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew uninstall --force --ignore-dependencies gcc gcc49 carthage xctool boost cgal gdal geos maven node postgis postgresql sfcgal subversion libgeotiff liblwgeom libspatialite go libksba mercurial && brew update && brew upgrade && brew install ${BREW} ; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew uninstall --ignore-dependencies --force $(brew list) && brew update && brew upgrade && brew install ${BREW} autoconf automake libtool gsl pkg-config wget ; fi
 
+install:
+  - |
+    if [ -n "${FC+1}" ]; then
+      if [ $TRAVIS_OS_NAME == osx ] ; then
+        wget http://www.lrz.de/services/software/mathematik/gsl/fortran/download/fgsl-1.2.0.tar.gz || exit 1
+        tar xfz fgsl-1.2.0.tar.gz || exit 1
+        cd fgsl-1.2.0
+      else
+        wget http://www.lrz.de/services/software/mathematik/gsl/fortran/download/fgsl-1.0.0.tar.gz || exit 1
+        tar xfz fgsl-1.0.0.tar.gz || exit 1
+        cd fgsl-1.0.0
+      fi
+      ./configure || exit 1
+      make || exit 1
+      if [ $TRAVIS_OS_NAME == osx ] ; then
+        make install || exit 1
+      else
+        sudo make install || exit 1
+      fi
+      cd ..
+    fi
 
 script:
   - autoreconf -fi || exit 1
