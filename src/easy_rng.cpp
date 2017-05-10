@@ -78,7 +78,10 @@ class _easy_rng_tmpl : public _easy_rng_base {
 		return dis(rng);
 	}
 	virtual double exponential(double mu) {
-		std::exponential_distribution<double> dis(mu);
+		// std::exponential_distribution takes the rate, not the mean like GSL, so we need to invert
+		// http://en.cppreference.com/w/cpp/numeric/random/exponential_distribution
+		// https://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html
+		std::exponential_distribution<double> dis(1.0/mu);
 		return dis(rng);
 	}
 	virtual double cauchy(double a) {
