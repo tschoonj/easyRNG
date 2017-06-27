@@ -25,7 +25,7 @@
  * - Optional: Fortran bindings to the GNU Scientific library (FGSL). When present a test will be run benchmarking easyRNG's Fortran API against FGSL.
  *  
  * \section downloading Downloading the software
- * Downloads are currently hosted [by the X-ray Micro-spectroscopy and Imaging Research Group of Ghent University](http://lvserver.ugent.be/easyRNG).
+ * The source code release tarballs are hosted on the Github repository, in the [releases section](https://github.com/tschoonj/easyRNG/releases).
  * Just get the latest tarball and run the following commands:
  *
  *       tar xfvz easyRNG-x.y.tar.gz
