@@ -73,23 +73,25 @@ matrix:
             - gfortran-8
       env: CC='gcc-8' CXX='g++-8' FC='gfortran-8' CFLAGS='-DNRUNS=100000000'
     - os: osx
-      osx_image: xcode6.4
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
-    - os: osx
       osx_image: xcode7.3
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
     - os: osx
       osx_image: xcode8.3
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
     - os: osx
+      osx_image: xcode10.1
       env: CC='gcc-4.9' CXX='g++-4.9' FC='gfortran-4.9' CFLAGS='-DNRUNS=100000000' BREW='gcc@4.9'
     - os: osx
+      osx_image: xcode10.1
       env: CC='gcc-5' CXX='g++-5' FC='gfortran-5' CFLAGS='-DNRUNS=100000000' BREW='gcc@5'
     - os: osx
+      osx_image: xcode10.1
       env: CC='gcc-6' CXX='g++-6' FC='gfortran-6' CFLAGS='-DNRUNS=100000000' BREW='gcc@6'
     - os: osx
+      osx_image: xcode10.1
       env: CC='gcc-7' CXX='g++-7' FC='gfortran-7' CFLAGS='-DNRUNS=100000000' BREW='gcc@7'
     - os: osx
+      osx_image: xcode10.1
       env: CC='gcc-8' CXX='g++-8' FC='gfortran-8' CFLAGS='-DNRUNS=100000000' BREW='gcc@8'
 
 env:
