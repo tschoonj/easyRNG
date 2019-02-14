@@ -101,8 +101,7 @@ ENDSUBROUTINE
 			BUILD_FORTRAN=yes
 			AC_MSG_NOTICE([Building Fortran bindings])
 			# Add fortran linker flags: necessary since the C++ linker will be used...
-			# Not necessary right now: to be added when need arises...
-			#AC_FC_LIBRARY_LDFLAGS
+			AC_FC_LIBRARY_LDFLAGS
 			PKG_CHECK_MODULES([fgsl], fgsl >= 1.0.0, [
 				#FGSL found
 				AC_DEFINE([HAVE_FGSL], [], [FGSL found])
