@@ -45,5 +45,15 @@ jobs:
         ./configure CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' CFLAGS='-DNRUNS=100000000'
         make
         make check
-        make distcheck CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)'
       displayName: Test build
+    - script: |
+        cd tests
+        ls -l
+        cat test*.log
+      displayName: Print test results
+      condition: failed()
+    - script: |
+        make distcheck CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)'
+      displayName: Test distcheck
+      condition: succeeded()
+
