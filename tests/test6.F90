@@ -29,7 +29,7 @@ CALL test_uniform_int(rng)
 CALL test_gaussian(rng)
 CALL test_ugaussian(rng)
 CALL test_exponential(rng)
-CALL test_gamma(rng)
+CALL test_gamma(rng) ! this one also appears to fail now and then...
 CALL test_flat(rng)
 CALL test_lognormal(rng)
 CALL test_chisq(rng)
