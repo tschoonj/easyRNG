@@ -42,7 +42,7 @@ jobs:
     - script: |
         set -e -x
         autoreconf -fi
-        ./configure CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' CFLAGS='-DNRUNS=100000000'
+        ./configure CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' CPPFLAGS='-DNRUNS=100000000'
         make
         make check
       displayName: Test build
@@ -96,11 +96,12 @@ jobs:
         set -e -x
         mkdir build
         cd build
-        CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' CFLAGS='-DNRUNS=100000000' meson ..
-        ninja
-        ninja test
+        CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' meson ..
+        ninja -v
+        ninja test -v
       displayName: Test build
     - script: |
+        cd build
         CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' ninja dist
       displayName: Test dist
       condition: succeeded()
