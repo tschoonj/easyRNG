@@ -1,1 +1,1 @@
-option('with-fortran', type: 'boolean', value: false, description: 'Build with Fortran support')
+option('with-fortran', type: 'boolean', value: true, description: 'Build with Fortran support')

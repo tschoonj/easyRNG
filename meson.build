@@ -41,6 +41,8 @@ ENDSUBROUTINE
 	endif
 	
 	fgsl_dep = dependency('fgsl', version: '>=1.0.0', required:false)
+
+	meson.add_install_script('install_fortran_mod.py')
 endif
 
 subdir('src')
