@@ -14,7 +14,7 @@ if get_option('with-fortran')
 	test('test4', test4)
 
 	if fgsl_dep.found()
-		test5 = executable('test5', 'test5.F90', dependencies: easyRNG_lib_dep, install: false)
+		test5 = executable('test5', 'test5.F90', dependencies: [easyRNG_lib_dep, fgsl_dep], install: false)
 		test('test5', test5)
 	endif
 
