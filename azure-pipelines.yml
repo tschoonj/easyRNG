@@ -4,7 +4,7 @@ variables:
 trigger: ['master']
 
 jobs:
-  - job: macOS_GCC_64
+  - job: macOS_GCC_64_AUTOTOOLS
     pool:
       vmImage: macOS-10.13
     strategy:
@@ -55,5 +55,53 @@ jobs:
     - script: |
         make distcheck CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)'
       displayName: Test distcheck
+      condition: succeeded()
+
+  - job: macOS_GCC_64_MESON
+    pool:
+      vmImage: macOS-10.13
+    strategy:
+      matrix:
+        GCC-4.9:
+          GCC_VERSION: 4.9
+        GCC-5:
+          GCC_VERSION: 5
+        GCC-6:
+          GCC_VERSION: 6
+        GCC-7:
+          GCC_VERSION: 7
+        GCC-8:
+          GCC_VERSION: 8
+    steps:
+    - script: |
+        set -e -x
+        brew update
+        brew upgrade
+      displayName: Update Homebrew
+    - script: |
+        set -e -x
+        brew install meson gsl wget pkg-config gcc@$(GCC_VERSION)
+      displayName: Install dependencies
+    - script: |
+        set -e -x
+        wget http://www.lrz.de/services/software/mathematik/gsl/fortran/download/fgsl-1.2.0.tar.gz
+        tar xfz fgsl-1.2.0.tar.gz
+        cd fgsl-1.2.0
+        ./configure CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)'
+        make
+        make install
+        cd ..
+      displayName: Install FGSL
+    - script: |
+        set -e -x
+        mkdir build
+        cd build
+        CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' CFLAGS='-DNRUNS=100000000' meson ..
+        ninja
+        ninja test
+      displayName: Test build
+    - script: |
+        CC='gcc-$(GCC_VERSION)' CXX='g++-$(GCC_VERSION)' FC='gfortran-$(GCC_VERSION)' ninja dist
+      displayName: Test dist
       condition: succeeded()
 
