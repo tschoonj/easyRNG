@@ -4,7 +4,7 @@ Version: @VERSION@
 Release: 1%{?dist}
 License: BSD
 Group: System Environment/Libraries
-Source: http://http://lvserver.ugent.be/easyRNG/easyRNG-%{version}.tar.gz
+Source: https://github.com/tschoonj/easyRNG/releases/download/easyRNG-%{version}/easyRNG-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 URL: https://tschoonj.github.io/easyRNG
 Requires: libstdc++

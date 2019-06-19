@@ -1,4 +1,4 @@
-AC_INIT([easyRNG],[1.1],[Tom.Schoonjans@me.com],[easyRNG],[https://tschoonj.github.io/easyRNG])
+AC_INIT([easyRNG],[1.2],[Tom.Schoonjans@me.com],[easyRNG],[https://tschoonj.github.io/easyRNG])
 AC_PREREQ([2.60])
 AC_CONFIG_SRCDIR([src/easy_rng.cpp])
 AC_CONFIG_AUX_DIR([build-aux])

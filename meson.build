@@ -47,6 +47,7 @@ endif
 
 subdir('src')
 
+# generate pkg-config file
 pkgconfig.generate(
 	filebase: 'easyRNG',
 	name: 'easyRNG',
@@ -56,5 +57,10 @@ pkgconfig.generate(
 	subdirs: 'easyRNG',
 	variables: ['with_fortran=' + (get_option('with-fortran') ? 'yes' : 'no')],
 )
+
+# generate RPM SPEC file
+rpm_config = configuration_data()
+rpm_config.set('VERSION', meson.project_version())
+configure_file(input: 'easyRNG.spec.in', output: 'easyRNG.spec', configuration: rpm_config, install: false)
 
 subdir('tests')

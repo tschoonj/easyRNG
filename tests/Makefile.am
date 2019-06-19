@@ -37,3 +37,5 @@ test6_LDADD = ../src/libeasyRNG.la -lm
 endif
 
 TESTS = $(check_PROGRAMS)
+
+EXTRA_DIST = meson.build
