@@ -278,7 +278,7 @@ stddev = SQRT(M2/NSAMPLES)
 WRITE (output_unit, '(A,ES10.3)') '      mean: ', mean
 WRITE (output_unit, '(A,ES10.3)') '      stddev: ', stddev
 CALL assert(ABS(mean - 50.0) < 1E-1, __LINE__)
-CALL assert(ABS(stddev - SQRT(10.0 * 5.0 * 5.0)) < 1E-2, __LINE__)
+CALL assert(ABS(stddev - SQRT(10.0 * 5.0 * 5.0))/SQRT(10.0 * 5.0 * 5.0) < 1E-2, __LINE__)
 
 ENDSUBROUTINE test_gamma
 
