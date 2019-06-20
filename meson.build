@@ -64,3 +64,8 @@ rpm_config.set('VERSION', meson.project_version())
 configure_file(input: 'easyRNG.spec.in', output: 'easyRNG.spec', configuration: rpm_config, install: false)
 
 subdir('tests')
+
+doxygen = find_program('doxygen', required : false)
+if doxygen.found()
+	subdir('docs')
+endif

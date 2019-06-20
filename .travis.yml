@@ -85,7 +85,7 @@ before_install:
   - |
     if [ $TRAVIS_OS_NAME == linux ]; then
       sudo apt-get --yes --force-yes update || exit 1
-      sudo apt-get --yes --force-yes install libgsl0-dev python3 python3-pip python3-setuptools python3-dev || exit 1
+      sudo apt-get --yes --force-yes install libgsl0-dev python3 python3-pip python3-setuptools python3-dev doxygen || exit 1
       pip3 install meson ninja || exit 1
     fi
   - |
@@ -94,7 +94,7 @@ before_install:
       brew uninstall --ignore-dependencies --force $(brew list) || exit 1
       brew update || exit 1
       brew upgrade || exit 1
-      brew install ${BREW} autoconf automake libtool gsl pkg-config wget meson || exit 1
+      brew install ${BREW} autoconf automake libtool gsl pkg-config wget meson doxygen || exit 1
     fi
 
 install:

@@ -27,7 +27,7 @@ jobs:
       displayName: Update Homebrew
     - script: |
         set -e -x
-        brew install autoconf automake libtool gsl wget pkg-config gcc@$(GCC_VERSION)
+        brew install autoconf automake libtool gsl wget pkg-config gcc@$(GCC_VERSION) doxygen
       displayName: Install dependencies
     - script: |
         set -e -x
@@ -92,7 +92,7 @@ jobs:
       displayName: Update Homebrew
     - script: |
         set -e -x
-        brew install meson gsl wget pkg-config gcc@$(GCC_VERSION)
+        brew install meson gsl wget pkg-config doxygen gcc@$(GCC_VERSION)
       displayName: Install dependencies
     - script: |
         set -e -x
