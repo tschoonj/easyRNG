@@ -4,7 +4,7 @@ Version: @VERSION@
 Release: 1%{?dist}
 License: BSD
 Group: System Environment/Libraries
-Source: http://http://lvserver.ugent.be/easyRNG/easyRNG-%{version}.tar.gz
+Source: https://github.com/tschoonj/easyRNG/releases/download/easyRNG-%{version}/easyRNG-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 URL: https://tschoonj.github.io/easyRNG
 Requires: libstdc++
@@ -20,7 +20,7 @@ easyRNG consists of a wrapper around C++11's random templates, providing random 
 %package devel
 Summary: Random number generators and distributions for C and Fortran: development package
 Group: Development/Libraries
-Requires: %name = %{version}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: gcc
 Requires: gcc-gfortran
 
@@ -32,7 +32,7 @@ This package contains the necessary headers and libraries to start developing wi
 %package doc
 Summary: Random number generators and distributions for C and Fortran: documentation
 Group: Development/Libraries
-Requires: %{name}-devel = %{version}
+Requires: %{name}%{?_isa}-devel = %{version}-%{release}
 
 %description doc
 easyRNG consists of a wrapper around C++11's random templates, providing random number generators and distributions, with an API modelled after the GNU Scientific Library.

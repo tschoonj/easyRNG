@@ -18,3 +18,5 @@ endif
 
 clean-local:
 	rm -rf easyrng.mod
+
+EXTRA_DIST = meson.build

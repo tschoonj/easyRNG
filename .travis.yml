@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 language: generic #cpp overrides our compilers, which is totally uncool
 
 matrix:
@@ -12,16 +12,6 @@ matrix:
           packages:
             - clang
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000'
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-4.8
-            - g++-4.8
-            - gfortran-4.8
-      env: CC='gcc-4.8' CXX='g++-4.8' FC='gfortran-4.8' CFLAGS='-DNRUNS=100000000'
     - os: linux
       addons:
         apt:
@@ -73,9 +63,6 @@ matrix:
             - gfortran-8
       env: CC='gcc-8' CXX='g++-8' FC='gfortran-8' CFLAGS='-DNRUNS=100000000'
     - os: osx
-      osx_image: xcode7.3
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
-    - os: osx
       osx_image: xcode8.3
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
     - os: osx
@@ -92,14 +79,19 @@ env:
     - PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
 before_install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get --yes --force-yes update && sudo apt-get --yes --force-yes install libgsl0-dev ; fi
+  - |
+    if [ $TRAVIS_OS_NAME == linux ]; then
+      sudo apt-get --yes --force-yes update || exit 1
+      sudo apt-get --yes --force-yes install libgsl0-dev python3 python3-pip python3-setuptools python3-dev doxygen || exit 1
+      pip3 install meson ninja || exit 1
+    fi
   - |
     if [ $TRAVIS_OS_NAME == osx ] ; then
       brew cask uninstall --force oclint || exit 1
       brew uninstall --ignore-dependencies --force $(brew list) || exit 1
       brew update || exit 1
       brew upgrade || exit 1
-      brew install ${BREW} autoconf automake libtool gsl pkg-config wget || exit 1
+      brew install ${BREW} autoconf automake libtool gsl pkg-config wget meson doxygen || exit 1
     fi
 
 install:
@@ -110,9 +102,9 @@ install:
         tar xfz fgsl-1.2.0.tar.gz || exit 1
         cd fgsl-1.2.0
       else
-        wget http://www.lrz.de/services/software/mathematik/gsl/fortran/download/fgsl-1.0.0.tar.gz || exit 1
-        tar xfz fgsl-1.0.0.tar.gz || exit 1
-        cd fgsl-1.0.0
+        wget http://www.lrz.de/services/software/mathematik/gsl/fortran/download/fgsl-1.1.0.tar.gz || exit 1
+        tar xfz fgsl-1.1.0.tar.gz || exit 1
+        cd fgsl-1.1.0
       fi
       ./configure || exit 1
       make || exit 1
@@ -125,11 +117,30 @@ install:
     fi
 
 script:
-  - autoreconf -fi || exit 1
-  - ./configure || exit 1
-  - make || exit 1
-  - make check || exit 1
-  - make distcheck || exit 1
+  - |
+    autoreconf -fi || exit 1
+    mkdir build-autotools || exit 1
+    cd build-autotools
+    ../configure || exit 1
+    make || exit 1
+    make check || exit 1
+    make distcheck || exit 1
+    cd ..
+  - |
+    unset CFLAGS
+    mkdir build-meson || exit 1
+    cd build-meson
+    if [ $CC == clang ] ; then
+      meson -Dwith-fortran=false .. || exit 1
+      ninja || exit 1
+      ninja test || exit 1
+    else
+      meson -Dwith-fortran=true ..  || exit 1
+      ninja || exit 1
+      ninja test || exit 1
+      ninja dist || exit 1
+    fi
+
 
 branches:
   only:
