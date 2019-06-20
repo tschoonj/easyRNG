@@ -63,9 +63,6 @@ matrix:
             - gfortran-8
       env: CC='gcc-8' CXX='g++-8' FC='gfortran-8' CFLAGS='-DNRUNS=100000000'
     - os: osx
-      osx_image: xcode7.3
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
-    - os: osx
       osx_image: xcode8.3
       env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
     - os: osx
