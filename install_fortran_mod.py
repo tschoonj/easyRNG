@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # taken from https://thispointer.com/python-how-to-get-list-of-files-in-directory-and-sub-directories/
 

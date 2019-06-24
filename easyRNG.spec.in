@@ -7,12 +7,16 @@ Group: System Environment/Libraries
 Source: https://github.com/tschoonj/easyRNG/releases/download/easyRNG-%{version}/easyRNG-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 URL: https://tschoonj.github.io/easyRNG
-Requires: libstdc++
+Requires:        libstdc++
 BuildRequires:   libstdc++-devel
 BuildRequires:   gcc-c++
 BuildRequires:   gcc
+%if 0%{?rhel} != 7
 BuildRequires:   gcc-gfortran
-BuildRequires:   doxygen graphviz
+BuildRequires:   meson
+Requires:        libgfortran
+%endif
+BuildRequires:   doxygen
 
 %description
 easyRNG consists of a wrapper around C++11's random templates, providing random number generators and distributions, with an API modelled after the GNU Scientific Library.
@@ -22,7 +26,10 @@ Summary: Random number generators and distributions for C and Fortran: developme
 Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: gcc
+Requires: pkgconfig
+%if 0%{?rhel} != 7
 Requires: gcc-gfortran
+%endif
 
 %description devel
 easyRNG consists of a wrapper around C++11's random templates, providing random number generators and distributions, with an API modelled after the GNU Scientific Library.
@@ -40,27 +47,51 @@ easyRNG consists of a wrapper around C++11's random templates, providing random 
 This package contains the easyRNG documentation in html format.
 
 %prep
+%if 0%{?rhel} != 7
+%setup -q -n %{name}-%{version}
+%else
 %setup -q
+%endif
 
 %build
-%configure
+%if 0%{?rhel} != 7
+%meson
+%meson_build
+%else
+%configure --disable-static
 #necessary to fix rpath issues during rpmbuild
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make
+%endif
 
 %install
+%if 0%{?rhel} != 7
+%meson_install
+%else
 rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 libtool --finish $RPM_BUILD_ROOT%{_libdir}
 find $RPM_BUILD_ROOT -name '*.la' | xargs rm -f
+%endif
+
+%check
+%if 0%{?rhel} != 7
+%meson_test
+%else
+export LD_LIBRARY_PATH=$PWD/src/.libs
+make check
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if %{defined ldconfig_scriptlets}
+%ldconfig_scriptlets
+%else
 %post -p /sbin/ldconfig
-
 %postun -p /sbin/ldconfig
+%endif
 
 %files
 %defattr(-, root, root)
@@ -69,7 +100,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(-, root, root)
 %{_libdir}/*so
-%{_libdir}/*a
 %{_libdir}/pkgconfig/*
 %{_includedir}/*
 
@@ -79,6 +109,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jun 21 2019 Tom Schoonjans <Tom.Schoonjans@me.com>
+- Add support for meson build system
 * Fri Aug 19 2016 Tom Schoonjans <Tom.Schoonjans@me.com>
 - Initial spec file
 
