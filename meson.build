@@ -1,4 +1,4 @@
-project('easyRNG', ['c', 'cpp'], version:'1.2', license: 'BSD', default_options: ['cpp_std=c++11'])
+project('easyRNG', ['c', 'cpp'], version:'1.2', license: 'BSD', default_options: ['cpp_std=c++11'], meson_version: '>= 0.46.0')
 
 # versioning stuff -> maintain compatibility with libtool!
 # # a) If binary compatibility has been broken (eg removed or changed interfaces)
@@ -71,19 +71,32 @@ subdir('src')
 
 # generate pkg-config file
 pkgconfig.generate(
+	easyRNG_lib,
 	filebase: 'easyRNG',
 	name: 'easyRNG',
-	description: 'wrapper around C++11\'s random number generators for use in C and Fortran',
+	description: 'wrapper around C++11\'s random number generators for use in C',
 	version: meson.project_version(),
 	libraries: easyRNG_lib,
 	subdirs: 'easyRNG',
-	variables: ['with_fortran=' + (get_option('with-fortran') ? 'yes' : 'no')],
 )
+
+if get_option('with-fortran')
+	pkgconfig.generate(
+		easyRNGf03_lib,
+		filebase: 'easyRNGf03',
+		name: 'easyRNGf03',
+		description: 'wrapper around C++11\'s random number generators for use in Fortran',
+		version: meson.project_version(),
+		libraries: [easyRNGf03_lib, easyRNG_lib],
+		subdirs: 'easyRNG',
+	)
+
+endif
 
 # generate RPM SPEC file
 rpm_config = configuration_data()
 rpm_config.set('VERSION', meson.project_version())
-configure_file(input: 'easyRNG.spec.in', output: 'easyRNG.spec', configuration: rpm_config, install: false)
+configure_file(input: 'easyRNG.spec.in', output: 'easyRNG.spec', configuration: rpm_config)
 
 subdir('tests')
 
