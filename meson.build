@@ -6,8 +6,8 @@ project('easyRNG', ['c', 'cpp'], version:'1.2', license: 'BSD', default_options:
 # # b) If interfaces have been changed or added, but binary compatibility has
 # #    been preserved, change to C+1:0:A+1
 # # c) If the interface is the same as the previous version, change to C:R+1:A
-lib_current = 0
-lib_revision = 1
+lib_current = 1
+lib_revision = 0
 lib_age = 0
 
 version = '@0@.@1@.@2@'.format((lib_current - lib_age), lib_age, lib_revision)
@@ -44,6 +44,28 @@ ENDSUBROUTINE
 
 	meson.add_install_script('install_fortran_mod.py')
 endif
+
+config_h = configuration_data()
+
+# Detect and set symbol visibility
+# Taken from gtksourceview
+if get_option('default_library') != 'static'
+	cpp = meson.get_compiler('cpp')
+	if host_machine.system() == 'windows'
+		config_h.set('DLL_EXPORT', true)
+		if cpp.get_id() == 'msvc'
+			config_h.set('EASYRNG_EXTERN', '__declspec(dllexport) extern')
+		elif cpp.has_argument('-fvisibility=hidden')
+			config_h.set('EASYRNG_EXTERN', '__attribute__((visibility("default"))) __declspec(dllexport) extern')
+		endif
+	elif cpp.has_argument('-fvisibility=hidden')
+		config_h.set('EASYRNG_EXTERN', '__attribute__((visibility("default"))) extern')
+	endif
+endif
+
+configure_file(output: 'config.h', configuration: config_h)
+
+rootdir = include_directories('.')
 
 subdir('src')
 

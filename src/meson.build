@@ -12,6 +12,6 @@ install_headers(headers, subdir: 'easyRNG')
 
 easyRNG_sources = headers + private_headers + sources
 
-easyRNG_lib = library('easyRNG', easyRNG_sources, version: version, darwin_versions: darwin_versions, install: true)
+easyRNG_lib = library('easyRNG', easyRNG_sources, version: version, darwin_versions: darwin_versions, install: true, include_directories: rootdir)
 
 easyRNG_lib_dep = declare_dependency(link_with: easyRNG_lib, include_directories: include_directories('.'))

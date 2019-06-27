@@ -5,8 +5,8 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_CANONICAL_HOST
 
-LIB_CURRENT=0
-LIB_REVISION=1
+LIB_CURRENT=1
+LIB_REVISION=0
 LIB_AGE=0
 AC_SUBST(LIB_CURRENT)
 AC_SUBST(LIB_REVISION)
@@ -21,7 +21,7 @@ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 #libtool
 LT_PREREQ([2.0.0])
 
-LT_INIT()
+LT_INIT([win32-dll disable-static])
 AC_PROG_LIBTOOL
 
 AC_PROG_CC
@@ -48,13 +48,55 @@ AC_PROG_CXX_C_O
 AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
 
 LDFLAGS_EXTRA=""
+OS_WINDOWS=0
 case "$host" in
 	*mingw*)
 		LDFLAGS_EXTRA+="-no-undefined"
+		OS_WINDOWS=1
 		;;
 esac
 AC_SUBST(LDFLAGS_EXTRA)
 
+if test $OS_WINDOWS = 1 ; then
+	if test x$enable_static = xyes -a x$enable_shared = xyes; then
+		AC_MSG_ERROR([Can not build both shared and static at the same time on Windows.])
+	fi
+fi
+
+# Symbol visibility handling.
+#
+# Taken from gtksourceview and modified where necessary
+HIDDEN_VISIBILITY_CXXFLAGS=""
+case "$host" in
+	*-*-mingw*)
+		dnl on mingw32 we do -fvisibility=hidden and __declspec(dllexport)
+		AC_DEFINE([EASYRNG_EXTERN], [__attribute__((visibility("default"))) __declspec(dllexport) extern],
+			[defines how to decorate public symbols while building])
+		HIDDEN_VISIBILITY_CXXFLAGS="-fvisibility=hidden"
+		;;
+	*)
+		dnl on other compilers, check if we can do -fvisibility=hidden
+		SAVED_CXXFLAGS="${CXXFLAGS}"
+		CXXFLAGS="-fvisibility=hidden"
+		AC_MSG_CHECKING([for -fvisibility=hidden compiler flag])
+		AC_LANG_PUSH(C++)
+		AC_TRY_COMPILE([], [return 0],
+			AC_MSG_RESULT(yes)
+			enable_fvisibility_hidden=yes,
+			AC_MSG_RESULT(no)
+			enable_fvisibility_hidden=no)
+		AC_LANG_POP(C++)
+		CXXFLAGS="${SAVED_CXXFLAGS}"
+
+		AS_IF([test "${enable_fvisibility_hidden}" = "yes"], [
+			AC_DEFINE([EASYRNG_EXTERN], [__attribute__((visibility("default"))) extern],
+				[defines how to decorate public symbols while building])
+			HIDDEN_VISIBILITY_CXXFLAGS="-fvisibility=hidden"
+		])
+		;;
+esac
+
+AC_SUBST(HIDDEN_VISIBILITY_CXXFLAGS)
 
 #check for Fortran support
 BUILD_FORTRAN=no
