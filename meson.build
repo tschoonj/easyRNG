@@ -12,9 +12,9 @@ lib_age = 0
 
 version = '@0@.@1@.@2@'.format((lib_current - lib_age), lib_age, lib_revision)
 
-current = lib_current - lib_age
+current = lib_current + 1
 interface_age = lib_revision
-darwin_versions = [current + 1, '@0@.@1@'.format(current + 1, interface_age)]
+darwin_versions = [current, '@0@.@1@'.format(current , interface_age)]
 
 gsl_dep = dependency('gsl', version: '>=1.13', required:false)
 
