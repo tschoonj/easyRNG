@@ -89,6 +89,13 @@ TYPE (easy_rng_type), PARAMETER :: easy_rng_default = easy_rng_type(9)
 CONTAINS
 
 !easy_rng * easy_rng_alloc (const easy_rng_type * T);
+#ifdef _WIN32
+#ifdef __GFORTRAN__
+!GCC$ ATTRIBUTES DLLEXPORT:: easy_rng_alloc
+#else
+!DEC$ ATTRIBUTES DLLEXPORT:: easy_rng_alloc
+#endif
+#endif
 FUNCTION easy_rng_alloc(T) RESULT(rv)
   TYPE (easy_rng_type), INTENT(IN) :: T
   TYPE (easy_rng) :: rv
