@@ -10,14 +10,14 @@ test3 = executable('test3', 'test3.c', dependencies: easyRNG_lib_dep, install: f
 test('test3', test3, timeout: 300)
 
 if get_option('with-fortran')
-	test4 = executable('test4', 'test4.F90', dependencies: easyRNGf03_lib_dep, install: false)
+	test4 = executable('test4', 'test4.F90', dependencies: easyRNG_lib_dep, install: false)
 	test('test4', test4)
 
 	if fgsl_dep.found()
-		test5 = executable('test5', 'test5.F90', dependencies: [easyRNGf03_lib_dep, fgsl_dep], install: false)
+		test5 = executable('test5', 'test5.F90', dependencies: [easyRNG_lib_dep, fgsl_dep], install: false)
 		test('test5', test5)
 	endif
 
-	test6 = executable('test6', 'test6.F90', dependencies: easyRNGf03_lib_dep, install: false)
+	test6 = executable('test6', 'test6.F90', dependencies: easyRNG_lib_dep, install: false)
 	test('test6', test6, timeout: 300)
 endif

@@ -10,13 +10,11 @@ libeasyRNG_la_CXXFLAGS = $(HIDDEN_VISIBILITY_CXXFLAGS)
  
 
 if ENABLE_FORTRAN
-lib_LTLIBRARIES += libeasyRNGf03.la
-libeasyRNGf03_la_SOURCES = easy_rng_f.F90
+libeasyRNG_la_SOURCES += easy_rng_f.F90
 nodist_easyRNGinclude_HEADERS = easyrng.mod 
 BUILT_SOURCES = easyrng.mod
-libeasyRNGf03_la_LIBADD = $(FCLIBS) libeasyRNG.la
-libeasyRNGf03_la_LDFLAGS = -version-info @LIB_CURRENT@:@LIB_REVISION@:@LIB_AGE@ $(LDFLAGS_EXTRA)
-easyrng.mod: libeasyRNGf03.la
+libeasyRNG_la_LIBADD = $(FCLIBS)
+easyrng.mod: libeasyRNG.la
 endif
 
 clean-local:

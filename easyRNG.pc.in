@@ -2,9 +2,10 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
+with_fortran=@with_fortran@
 
 Name: easyRNG
-Description: wrapper around C++11's random number generators for use in C
+Description: wrapper around C++11's random number generators for use in C and Fortran 
 Version: @VERSION@
 Requires:
 Conflicts:

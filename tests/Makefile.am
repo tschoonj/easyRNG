@@ -21,19 +21,19 @@ if ENABLE_FORTRAN
 check_PROGRAMS += test4
 test4_SOURCES = test4.F90
 test4_FCFLAGS = -I$(top_builddir)/src
-test4_LDADD = ../src/libeasyRNGf03.la
+test4_LDADD = ../src/libeasyRNG.la
 
 if ENABLE_FGSL_TEST
 check_PROGRAMS += test5
 test5_SOURCES = test5.F90
 test5_FCFLAGS = -I$(top_builddir)/src $(fgsl_CFLAGS)
-test5_LDADD = ../src/libeasyRNGf03.la ../src/libeasyRNG.la $(fgsl_LIBS) -lm
+test5_LDADD = ../src/libeasyRNG.la $(fgsl_LIBS) -lm
 endif
 
 check_PROGRAMS += test6
 test6_SOURCES = test6.F90
 test6_FCFLAGS = -I$(top_builddir)/src
-test6_LDADD = ../src/libeasyRNGf03.la ../src/libeasyRNG.la -lm
+test6_LDADD = ../src/libeasyRNG.la -lm
 endif
 
 TESTS = $(check_PROGRAMS)
