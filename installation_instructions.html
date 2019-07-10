@@ -28,7 +28,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">easyRNG
-   &#160;<span id="projectnumber">1.1</span>
+   &#160;<span id="projectnumber">1.2</span>
    </div>
    <div id="projectbrief">BSD licensed random number generators for C and Fortran</div>
   </td>
@@ -103,23 +103,23 @@ Linux</h2>
 Fedora, Centos and Scientific Linux</h3>
 <p>To facilitate the installation on RPM based Linux distributions, the package includes a spec file which can be used to produce RPM packages for linux distributions that support them (Fedora, Red Hat etc). The developers have built 64-bit RPM packages of easyRNG for the officially supported Fedora and Redhat EL/CentOS/Scientific Linux 7 distributions. These can be downloaded from the RPM repository that is hosted by the X-ray Microspectroscopy and Imaging research group of Ghent University. Access to this repository can be obtained as follows for Fedora distros:</p>
 <blockquote class="doxtable">
-<p>&lsquo;su -c 'rpm -Uvh <a href="http://lvserver.ugent.be/yum/xmi-repo-key-fedora.noarch.rpm&rsquo;">http://lvserver.ugent.be/yum/xmi-repo-key-fedora.noarch.rpm&amp;rsquo;</a>` </p>
+<p><code>sudo rpm -Uvh <a href="http://lvserver.ugent.be/yum/xmi-repo-key-fedora.noarch.rpm">http://lvserver.ugent.be/yum/xmi-repo-key-fedora.noarch.rpm</a></code> </p>
 </blockquote>
 <p>for Red Hat EL 7 based distributions:</p>
 <blockquote class="doxtable">
-<p>&lsquo;su -c 'rpm -Uvh <a href="http://lvserver.ugent.be/yum/xmi-repo-key-7.0-1.el7.noarch.rpm&rsquo;">http://lvserver.ugent.be/yum/xmi-repo-key-7.0-1.el7.noarch.rpm&amp;rsquo;</a>` </p>
+<p><code>sudo rpm -Uvh <a href="http://lvserver.ugent.be/yum/xmi-repo-key-7.0-1.el7.noarch.rpm">http://lvserver.ugent.be/yum/xmi-repo-key-7.0-1.el7.noarch.rpm</a></code> </p>
 </blockquote>
 <p>The easyRNG packages themselves can then be downloaded using yum (or <code>dnf</code> which is increasingly being used nowadays):</p>
 <blockquote class="doxtable">
-<p>&lsquo;su -c 'yum install easyRNG easyRNG-devel easyRNG-doc&rsquo;` </p>
+<p><code>sudo yum install easyRNG easyRNG-devel easyRNG-doc</code> </p>
 </blockquote>
 <p>Updates can be installed in a similar way:</p>
 <blockquote class="doxtable">
-<p>&lsquo;su -c 'yum update easyRNG easyRNG-devel easyRNG-doc&rsquo;` </p>
+<p><code>sudo yum update easyRNG easyRNG-devel easyRNG-doc</code> </p>
 </blockquote>
 <h3><a class="anchor" id="debian"></a>
 Debian and Ubuntu</h3>
-<p>Packages were created for Debian and Ubuntu. Currently the following flavors are supported: Debian Jessie and Stretch, and several Ubuntu versions . In order to access these packages using your favorite package manager, execute the following command to import my public key:</p>
+<p>Packages were created for the currently officially supported Debian and Ubuntu distributions.. In order to access these packages using your favorite package manager, execute the following command to import my public key:</p>
 <blockquote class="doxtable">
 <p><code>curl <a href="http://xmi-apt.tomschoonjans.eu/xmi.packages.key">http://xmi-apt.tomschoonjans.eu/xmi.packages.key</a> | sudo apt-key add -</code> </p>
 </blockquote>
@@ -128,8 +128,8 @@ Debian and Ubuntu</h3>
   deb-src http://xmi-apt.tomschoonjans.eu/debian jessie stable
 </pre><p>Debian Stretch: </p><pre class="fragment">  deb http://xmi-apt.tomschoonjans.eu/debian stretch stable
   deb-src http://xmi-apt.tomschoonjans.eu/debian stretch stable
-</pre><p>Ubuntu Trusty 14.04: </p><pre class="fragment">  deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu trusty stable
-  deb-src http://xmi-apt.tomschoonjans.eu/ubuntu trusty stable
+</pre><p>Debian Buster: </p><pre class="fragment">  deb http://xmi-apt.tomschoonjans.eu/debian buster stable
+  deb-src http://xmi-apt.tomschoonjans.eu/debian buster stable
 </pre><p>Ubuntu Xenial 16.04: </p><pre class="fragment">  deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu xenial stable
   deb-src http://xmi-apt.tomschoonjans.eu/ubuntu xenial stable
 </pre><p>Ubuntu Bionic 18.04: </p><pre class="fragment">  deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu bionic stable
