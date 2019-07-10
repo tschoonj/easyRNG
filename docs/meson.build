@@ -7,8 +7,7 @@ doxygen_cdata.set('builddir', meson.current_build_dir())
 
 doxyfile = configure_file(input: 'Doxyfile.in',
                           output: 'Doxyfile',
-                          configuration: doxygen_cdata,
-                          install: false)
+                          configuration: doxygen_cdata)
 
 datadir = join_paths(get_option('datadir'), 'doc', 'easyRNG')
 

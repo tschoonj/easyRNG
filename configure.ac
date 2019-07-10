@@ -178,7 +178,7 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([docs/Doxyfile])])
 
 
-AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc docs/Makefile easyRNG.spec])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile easyRNG.pc easyRNGf03.pc docs/Makefile easyRNG.spec])
 AC_CONFIG_HEADERS([config.h])
 
 AC_OUTPUT
