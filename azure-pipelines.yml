@@ -19,6 +19,8 @@ jobs:
           GCC_VERSION: 7
         GCC-8:
           GCC_VERSION: 8
+        GCC-9:
+          GCC_VERSION: 9
     steps:
     - script: |
         set -e -x
@@ -82,8 +84,8 @@ jobs:
           GCC_VERSION: 6
         GCC-7:
           GCC_VERSION: 7
-        GCC-8:
-          GCC_VERSION: 8
+        GCC-9:
+          GCC_VERSION: 9
     steps:
     - script: |
         set -e -x

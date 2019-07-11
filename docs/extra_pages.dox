@@ -45,23 +45,23 @@
  *  \subsubsection rhel Fedora, Centos and Scientific Linux
  *  To facilitate the installation on RPM based Linux distributions, the package includes a spec file which can be used to produce RPM packages for linux distributions that support them (Fedora, Red Hat etc). The developers have built 64-bit RPM packages of easyRNG for the officially supported Fedora and Redhat EL/CentOS/Scientific Linux 7 distributions. These can be downloaded from the RPM repository that is hosted by the X-ray Microspectroscopy and Imaging research group of Ghent University. Access to this repository can be obtained as follows for Fedora distros:
  *
- * > `su -c 'rpm -Uvh http://lvserver.ugent.be/yum/xmi-repo-key-fedora.noarch.rpm'`
+ * > `sudo rpm -Uvh http://lvserver.ugent.be/yum/xmi-repo-key-fedora.noarch.rpm`
  *
  * for Red Hat EL 7 based distributions:
  *
- * > `su -c 'rpm -Uvh http://lvserver.ugent.be/yum/xmi-repo-key-7.0-1.el7.noarch.rpm'`
+ * > `sudo rpm -Uvh http://lvserver.ugent.be/yum/xmi-repo-key-7.0-1.el7.noarch.rpm`
  *
  * The easyRNG packages themselves can then be downloaded using yum (or \c dnf which is increasingly being used nowadays):
  *
- * > `su -c 'yum install easyRNG easyRNG-devel easyRNG-doc'`
+ * > `sudo yum install easyRNG easyRNG-devel easyRNG-doc`
  *
  * Updates can be installed in a similar way:
  *
- * > `su -c 'yum update easyRNG easyRNG-devel easyRNG-doc'`
+ * > `sudo yum update easyRNG easyRNG-devel easyRNG-doc`
  *
  * \subsubsection debian Debian and Ubuntu
  *
- * Packages were created for Debian and Ubuntu. Currently the following flavors are supported: Debian Jessie and Stretch, and several Ubuntu versions .
+ * Packages were created for the currently officially supported Debian and Ubuntu distributions..
  * In order to access these packages using your favorite package manager, execute the following command to import my public key:
  *
  * > `curl http://xmi-apt.tomschoonjans.eu/xmi.packages.key | sudo apt-key add -`
@@ -79,10 +79,10 @@
  *       deb http://xmi-apt.tomschoonjans.eu/debian stretch stable
  *       deb-src http://xmi-apt.tomschoonjans.eu/debian stretch stable
  *
- * Ubuntu Trusty 14.04:
+ * Debian Buster:
  *
- *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu trusty stable
- *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu trusty stable
+ *       deb http://xmi-apt.tomschoonjans.eu/debian buster stable
+ *       deb-src http://xmi-apt.tomschoonjans.eu/debian buster stable
  *
  * Ubuntu Xenial 16.04:
  * 
