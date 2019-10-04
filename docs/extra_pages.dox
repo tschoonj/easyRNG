@@ -51,6 +51,10 @@
  *
  * > `sudo rpm -Uvh http://lvserver.ugent.be/yum/xmi-repo-key-7.0-1.el7.noarch.rpm`
  *
+ * and for Red Hat EL 8 based distributions:
+ *
+ * > `sudo rpm -Uvh http://lvserver.ugent.be/yum/xmi-repo-key-8.0-1.el8.noarch.rpm`
+ *
  * The easyRNG packages themselves can then be downloaded using yum (or \c dnf which is increasingly being used nowadays):
  *
  * > `sudo yum install easyRNG easyRNG-devel easyRNG-doc`
