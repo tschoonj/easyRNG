@@ -93,7 +93,7 @@ before_install:
     if [ $TRAVIS_OS_NAME == linux ]; then
       sudo apt-get --yes --force-yes update || exit 1
       sudo apt-get --yes --force-yes install libgsl0-dev python3 python3-pip python3-setuptools python3-dev doxygen || exit 1
-      pip3 install meson ninja || exit 1
+      pip3 install meson==0.52.1 ninja || exit 1
     fi
   - |
     if [ $TRAVIS_OS_NAME == osx ] ; then
