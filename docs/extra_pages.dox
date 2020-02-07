@@ -35,7 +35,19 @@
  *       make check
  *       make install
  *
- *  This procedure is known to work on Linux, Mac OS X and Windows (using [msys2](https://msys2.github.io/))
+ * Alternatively, you can also use Meson and Ninja to install easyRNG:
+ *
+ *       tar xfvz easyRNG-x.y.tar.gz
+ *       cd easyRNG-x.y
+ *       mkdir build
+ *       cd build
+ *       meson ..
+ *       ninja
+ *       ninja test
+ *       ninja install
+ *
+ *  This procedures are known to work on Linux, Mac OS X and Windows (using [msys2](https://msys2.github.io/))
+ *
  *  \subsection homebrew Homebrew                                                                                     
  *  Homebrew users can install easyRNG via my tap:
  *  
@@ -43,7 +55,7 @@
  *
  *  \subsection linux Linux
  *  \subsubsection rhel Fedora, Centos and Scientific Linux
- *  To facilitate the installation on RPM based Linux distributions, the package includes a spec file which can be used to produce RPM packages for linux distributions that support them (Fedora, Red Hat etc). The developers have built 64-bit RPM packages of easyRNG for the officially supported Fedora and Redhat EL/CentOS/Scientific Linux 7 distributions. These can be downloaded from the RPM repository that is hosted by the X-ray Microspectroscopy and Imaging research group of Ghent University. Access to this repository can be obtained as follows for Fedora distros:
+ *  To facilitate the installation on RPM based Linux distributions, the package includes a spec file which can be used to produce RPM packages for linux distributions that support them (Fedora, Red Hat etc). The developers have built 64-bit RPM packages of easyRNG for the officially supported Fedora and Redhat EL/CentOS/Scientific Linux 7 and 8 distributions. These can be downloaded from the RPM repository that is hosted by the X-ray Microspectroscopy and Imaging research group of Ghent University. Access to this repository can be obtained as follows for Fedora distros:
  *
  * > `sudo rpm -Uvh http://lvserver.ugent.be/yum/xmi-repo-key-fedora.noarch.rpm`
  *
@@ -72,36 +84,15 @@
  *
  * Next, add the package download location corresponding to your distribution to the /etc/apt/sources.list file (as root):
  *
- *
- * Debian Jessie:
- *
- *       deb http://xmi-apt.tomschoonjans.eu/debian jessie stable
- *       deb-src http://xmi-apt.tomschoonjans.eu/debian jessie stable
- *
- * Debian Stretch:
- *
- *       deb http://xmi-apt.tomschoonjans.eu/debian stretch stable
- *       deb-src http://xmi-apt.tomschoonjans.eu/debian stretch stable
- *
  * Debian Buster:
  *
  *       deb http://xmi-apt.tomschoonjans.eu/debian buster stable
  *       deb-src http://xmi-apt.tomschoonjans.eu/debian buster stable
  *
- * Ubuntu Xenial 16.04:
- * 
- *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu xenial stable
- *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu xenial stable
- *
  * Ubuntu Bionic 18.04:
  *
  *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu bionic stable
  *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu bionic stable
- *
- * Ubuntu Disco 19.04:
- *
- *       deb [arch=amd64] http://xmi-apt.tomschoonjans.eu/ubuntu disco stable
- *       deb-src http://xmi-apt.tomschoonjans.eu/ubuntu disco stable
  *
  * Ubuntu Eoan 19.10:
  *
