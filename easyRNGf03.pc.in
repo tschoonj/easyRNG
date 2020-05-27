@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: easyRNGf03
+Description: wrapper around C++11's random number generators for use in Fortran
+Version: @VERSION@
+Requires: easyRNG
+Conflicts:
+Libs: -L${libdir} -leasyRNGf03
+Cflags: -I${includedir}/easyRNGf03

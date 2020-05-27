@@ -60,6 +60,7 @@ extern "C" {
  * \param sigma The standard deviation of the normal distribution
  * \returns A double precision real number, sampled from a normal distribution
  */
+EASYRNG_EXTERN
 double easy_ran_gaussian (const easy_rng * r, double sigma);
 
 /** Generate double precision real numbers according to a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution)
@@ -69,6 +70,7 @@ double easy_ran_gaussian (const easy_rng * r, double sigma);
  * \param sigma The standard deviation of the normal distribution
  * \returns A double precision real number, sampled from a normal distribution
  */
+EASYRNG_EXTERN
 double easy_ran_gaussian_ziggurat (const easy_rng * r, double sigma);
 
 /** Generate double precision real numbers according to a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution)
@@ -78,6 +80,7 @@ double easy_ran_gaussian_ziggurat (const easy_rng * r, double sigma);
  * \param sigma The standard deviation of the normal distribution
  * \returns A double precision real number, sampled from a normal distribution
  */
+EASYRNG_EXTERN
 double easy_ran_gaussian_ratio_method (const easy_rng * r, double sigma);
 
 /** Generate double precision real numbers according to a [unit normal distribution](https://en.wikipedia.org/wiki/Normal_distribution#Standard_normal_distribution)
@@ -89,6 +92,7 @@ double easy_ran_gaussian_ratio_method (const easy_rng * r, double sigma);
  * \param r The random number generator instance
  * \returns A double precision real number, sampled from a unit normal distribution
  */
+EASYRNG_EXTERN
 double easy_ran_ugaussian (const easy_rng * r);
 
 /** Generate double precision real numbers according to a [unit normal distribution](https://en.wikipedia.org/wiki/Normal_distribution#Standard_normal_distribution)
@@ -97,6 +101,7 @@ double easy_ran_ugaussian (const easy_rng * r);
  * \param r The random number generator instance
  * \returns A double precision real number, sampled from a unit normal distribution
  */
+EASYRNG_EXTERN
 double easy_ran_ugaussian_ratio_method (const easy_rng * r);
 
 /** Generate double precision random numbers according to an [exponential distribution](https://en.wikipedia.org/wiki/Exponential_distribution)
@@ -109,6 +114,7 @@ double easy_ran_ugaussian_ratio_method (const easy_rng * r);
  * \param mu The inverse rate
  * \returns A positive double precision real number, sampled from an exponential distribution
  */
+EASYRNG_EXTERN
 double easy_ran_exponential (const easy_rng * r, double mu);
 
 /** Generate double precision random numbers according to a [Cauchy distribution](https://en.wikipedia.org/wiki/Cauchy_distribution)
@@ -121,6 +127,7 @@ double easy_ran_exponential (const easy_rng * r, double mu);
  * \param a The scale parameter
  * \returns A double precision real number, sampled from a Cauchy distribution
  */
+EASYRNG_EXTERN
 double easy_ran_cauchy (const easy_rng * r, double a);
 
 /** Generate double precision random numbers according to a [Gamma distribution](https://en.wikipedia.org/wiki/Gamma_distribution)
@@ -134,6 +141,7 @@ double easy_ran_cauchy (const easy_rng * r, double a);
  * \param theta The scale parameter (must be strictly positive)
  * \returns A positive double precision real number, sampled from a Gamma distribution
  */
+EASYRNG_EXTERN
 double easy_ran_gamma (const easy_rng * r, double k, double theta);
 
 /** Generate double precision random numbers according to a [flat distribution](https://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29)
@@ -147,6 +155,7 @@ double easy_ran_gamma (const easy_rng * r, double k, double theta);
  * \param b The maximum value of the sampling interval
  * \returns A double precision real number, sampled from a flat distribution
  */
+EASYRNG_EXTERN
 double easy_ran_flat (const easy_rng * r, double a, double b);
 
 /** Generate double precision random numbers according to a [log-normal distribution](https://en.wikipedia.org/wiki/Log-normal_distribution)
@@ -160,6 +169,7 @@ double easy_ran_flat (const easy_rng * r, double a, double b);
  * \param sigma The scale parameter (must be strictly positive)
  * \returns A positive double precision real number, sampled from a log-normal distribution
  */
+EASYRNG_EXTERN
 double easy_ran_lognormal (const easy_rng * r, double mu, double sigma);
 
 /** Generate double precision random numbers according to a [chi-squared distribution](https://en.wikipedia.org/wiki/Chi-squared_distribution)
@@ -172,6 +182,7 @@ double easy_ran_lognormal (const easy_rng * r, double mu, double sigma);
  * \param k The degrees of freedom
  * \returns A positive double precision real number, sampled from a chi-squared distribution
  */
+EASYRNG_EXTERN
 double easy_ran_chisq (const easy_rng * r, double k);
 
 /** Generate double precision random numbers according to an [F distribution](https://en.wikipedia.org/wiki/F-distribution)
@@ -185,6 +196,7 @@ double easy_ran_chisq (const easy_rng * r, double k);
  * \param d_2 The second degrees of freedom
  * \returns A positive double precision real number, sampled from a F-distribution
  */
+EASYRNG_EXTERN
 double easy_ran_fdist (const easy_rng * r, double d_1, double d_2);
 
 /** Generate double precision random numbers according to a [Student's t-distribution](https://en.wikipedia.org/wiki/Student's_t-distribution)
@@ -197,6 +209,7 @@ double easy_ran_fdist (const easy_rng * r, double d_1, double d_2);
  * \param nu The degrees of freedom
  * \returns A double precision real number, sampled from a Student's t-distribution
  */
+EASYRNG_EXTERN
 double easy_ran_tdist (const easy_rng * r, double nu);
 
 /** Generate double precision random numbers according to a [Weibull distribution](https://en.wikipedia.org/wiki/Weibull_distribution)
@@ -210,6 +223,7 @@ double easy_ran_tdist (const easy_rng * r, double nu);
  * \param k The shape parameter
  * \returns A double precision real number, sampled from a Weibull distribution
  */
+EASYRNG_EXTERN
 double easy_ran_weibull (const easy_rng * r, double lambda, double k);
 
 // Thought that std::extreme_value_distribution was matching Gumbel Type 1, but that looks incorrect
@@ -233,6 +247,7 @@ typedef struct _easy_ran_discrete_t easy_ran_discrete_t;
  * \returns The lookup table. Pass this variable to easy_ran_discrete() to generate discrete random numbers based on the contents of \c P
  * \warning The Fortran API drops the \c K argument as the size of the P array can be determined from the variable itself.
  */
+EASYRNG_EXTERN
 easy_ran_discrete_t * easy_ran_discrete_preproc (size_t K, const double * P);
 
 /** Generate positive integers according to a discrete distribution
@@ -241,12 +256,14 @@ easy_ran_discrete_t * easy_ran_discrete_preproc (size_t K, const double * P);
  * \param g The lookup table
  * \returns A positive integer, sampled from a discrete distribution
  */
+EASYRNG_EXTERN
 size_t easy_ran_discrete (const easy_rng * r, const easy_ran_discrete_t * g);
 
 /** Frees the memory associated with a discrete distribution lookup table
  *
  * \param g The lookup table
  */
+EASYRNG_EXTERN
 void easy_ran_discrete_free (easy_ran_discrete_t * g);
 
 /** Generate positive integers according to a [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution)
@@ -259,6 +276,7 @@ void easy_ran_discrete_free (easy_ran_discrete_t * g);
  * \param lambda The average number of events in an interval
  * \returns A positive integer, sampled from a Poisson distribution
  */
+EASYRNG_EXTERN
 unsigned int easy_ran_poisson (const easy_rng * r, double lambda);
 
 /** Generate zeroes and ones according to a [Bernoulli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution)
@@ -271,6 +289,7 @@ unsigned int easy_ran_poisson (const easy_rng * r, double lambda);
  * \param p The success probability
  * \returns 0 or 1, sampled from a Bernoulli distribution
  */
+EASYRNG_EXTERN
 unsigned int easy_ran_bernoulli (const easy_rng * r, double p);
 
 /** Generate positive integers according to a [binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution)
@@ -284,6 +303,7 @@ unsigned int easy_ran_bernoulli (const easy_rng * r, double p);
  * \param n The number of trials
  * \returns A positive integer, sampled from a binomial distribution
  */
+EASYRNG_EXTERN
 unsigned int easy_ran_binomial (const easy_rng * r, double p, unsigned int n);
 
 /** Generate positive integers according to a [negative binomial distribution](https://en.wikipedia.org/wiki/Negative_binomial_distribution)
@@ -298,6 +318,7 @@ unsigned int easy_ran_binomial (const easy_rng * r, double p, unsigned int n);
  * \param n The number of successful trials
  * \returns A positive integer, sampled from a negative binomial distribution
  */
+EASYRNG_EXTERN
 unsigned int easy_ran_negative_binomial (const easy_rng * r, double p, unsigned int n);
 
 /** Generate positive integers according to a [geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution)
@@ -310,6 +331,7 @@ unsigned int easy_ran_negative_binomial (const easy_rng * r, double p, unsigned 
  * \param p The success probability for each trial
  * \returns A positive integer, sampled from a geometric distribution
  */
+EASYRNG_EXTERN
 unsigned int easy_ran_geometric (const easy_rng * r, double p);
 
 #ifdef __cplusplus

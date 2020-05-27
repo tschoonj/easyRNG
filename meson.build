@@ -1,4 +1,4 @@
-project('easyRNG', ['c', 'cpp'], version:'1.2', license: 'BSD', default_options: ['cpp_std=c++11'])
+project('easyRNG', ['c', 'cpp'], version:'1.2', license: 'BSD', default_options: ['cpp_std=c++11'], meson_version: '>= 0.46.0')
 
 # versioning stuff -> maintain compatibility with libtool!
 # # a) If binary compatibility has been broken (eg removed or changed interfaces)
@@ -6,8 +6,8 @@ project('easyRNG', ['c', 'cpp'], version:'1.2', license: 'BSD', default_options:
 # # b) If interfaces have been changed or added, but binary compatibility has
 # #    been preserved, change to C+1:0:A+1
 # # c) If the interface is the same as the previous version, change to C:R+1:A
-lib_current = 0
-lib_revision = 1
+lib_current = 1
+lib_revision = 0
 lib_age = 0
 
 version = '@0@.@1@.@2@'.format((lib_current - lib_age), lib_age, lib_revision)
@@ -45,23 +45,58 @@ ENDSUBROUTINE
 	meson.add_install_script('install_fortran_mod.py')
 endif
 
+config_h = configuration_data()
+
+# Detect and set symbol visibility
+# Taken from gtksourceview
+if get_option('default_library') != 'static'
+	cpp = meson.get_compiler('cpp')
+	if host_machine.system() == 'windows'
+		config_h.set('DLL_EXPORT', true)
+		if cpp.get_id() == 'msvc'
+			config_h.set('EASYRNG_EXTERN', '__declspec(dllexport) extern')
+		elif cpp.has_argument('-fvisibility=hidden')
+			config_h.set('EASYRNG_EXTERN', '__attribute__((visibility("default"))) __declspec(dllexport) extern')
+		endif
+	elif cpp.has_argument('-fvisibility=hidden')
+		config_h.set('EASYRNG_EXTERN', '__attribute__((visibility("default"))) extern')
+	endif
+endif
+
+configure_file(output: 'config.h', configuration: config_h)
+
+rootdir = include_directories('.')
+
 subdir('src')
 
 # generate pkg-config file
 pkgconfig.generate(
+	easyRNG_lib,
 	filebase: 'easyRNG',
 	name: 'easyRNG',
-	description: 'wrapper around C++11\'s random number generators for use in C and Fortran',
+	description: 'wrapper around C++11\'s random number generators for use in C',
 	version: meson.project_version(),
 	libraries: easyRNG_lib,
 	subdirs: 'easyRNG',
-	variables: ['with_fortran=' + (get_option('with-fortran') ? 'yes' : 'no')],
 )
+
+if get_option('with-fortran')
+	pkgconfig.generate(
+		easyRNGf03_lib,
+		filebase: 'easyRNGf03',
+		name: 'easyRNGf03',
+		description: 'wrapper around C++11\'s random number generators for use in Fortran',
+		version: meson.project_version(),
+		libraries: [easyRNGf03_lib, easyRNG_lib],
+		subdirs: 'easyRNG',
+	)
+
+endif
 
 # generate RPM SPEC file
 rpm_config = configuration_data()
 rpm_config.set('VERSION', meson.project_version())
-configure_file(input: 'easyRNG.spec.in', output: 'easyRNG.spec', configuration: rpm_config, install: false)
+configure_file(input: 'easyRNG.spec.in', output: 'easyRNG.spec', configuration: rpm_config)
 
 subdir('tests')
 

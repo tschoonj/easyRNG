@@ -55,4 +55,6 @@ DO i=1,SIZE(all_types)
 
 ENDDO
 
+DEALLOCATE(all_types)
+
 ENDPROGRAM test4

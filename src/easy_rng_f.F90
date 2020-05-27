@@ -49,9 +49,9 @@ USE, INTRINSIC :: ISO_FORTRAN_ENV
 
 IMPLICIT NONE
 
-TYPE, BIND(C) :: easy_rng_type
+TYPE :: easy_rng_type
   PRIVATE
-  TYPE (C_PTR) :: rng_type
+  INTEGER (C_INT) :: id
 ENDTYPE easy_rng_type
 
 TYPE :: easy_rng
@@ -64,23 +64,42 @@ TYPE :: easy_ran_discrete_t
   TYPE (C_PTR) :: ran_discrete_t
 ENDTYPE
 
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_minstd_rand0') :: easy_rng_minstd_rand0
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_minstd_rand') :: easy_rng_minstd_rand
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_mt19937') :: easy_rng_mt19937
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_mt19937_64') :: easy_rng_mt19937_64
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_ranlux24_base') :: easy_rng_ranlux24_base
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_ranlux48_base') :: easy_rng_ranlux48_base
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_ranlux24') :: easy_rng_ranlux24
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_ranlux48') :: easy_rng_ranlux48
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_knuth_b') :: easy_rng_knuth_b
-TYPE (easy_rng_type), BIND(C, NAME='easy_rng_default') :: easy_rng_default
+TYPE (C_PTR), BIND(C, NAME='easy_rng_minstd_rand0') :: easy_rng_minstd_rand0_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_minstd_rand') :: easy_rng_minstd_rand_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_mt19937') :: easy_rng_mt19937_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_mt19937_64') :: easy_rng_mt19937_64_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_ranlux24_base') :: easy_rng_ranlux24_base_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_ranlux48_base') :: easy_rng_ranlux48_base_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_ranlux24') :: easy_rng_ranlux24_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_ranlux48') :: easy_rng_ranlux48_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_knuth_b') :: easy_rng_knuth_b_c
+TYPE (C_PTR), BIND(C, NAME='easy_rng_default') :: easy_rng_default_c
+
+TYPE (easy_rng_type), PARAMETER :: easy_rng_minstd_rand0 = easy_rng_type(0)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_minstd_rand = easy_rng_type(1)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_mt19937 = easy_rng_type(2)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_mt19937_64 = easy_rng_type(3)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_ranlux24_base = easy_rng_type(4)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_ranlux48_base = easy_rng_type(5)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_ranlux24 = easy_rng_type(6)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_ranlux48 = easy_rng_type(7)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_knuth_b = easy_rng_type(8)
+TYPE (easy_rng_type), PARAMETER :: easy_rng_default = easy_rng_type(9)
 
 CONTAINS
 
 !easy_rng * easy_rng_alloc (const easy_rng_type * T);
+#ifdef _WIN32
+#ifdef __GFORTRAN__
+!GCC$ ATTRIBUTES DLLEXPORT:: easy_rng_alloc
+#else
+!DEC$ ATTRIBUTES DLLEXPORT:: easy_rng_alloc
+#endif
+#endif
 FUNCTION easy_rng_alloc(T) RESULT(rv)
   TYPE (easy_rng_type), INTENT(IN) :: T
   TYPE (easy_rng) :: rv
+  TYPE (C_PTR) :: T_c
 
   INTERFACE
     FUNCTION easy_rng_alloc_c(T) BIND(C, NAME='easy_rng_alloc') RESULT(rv)
@@ -89,9 +108,43 @@ FUNCTION easy_rng_alloc(T) RESULT(rv)
       TYPE (C_PTR), VALUE, INTENT(IN) :: T
       TYPE (C_PTR) :: rv
     ENDFUNCTION easy_rng_alloc_c
+
+    SUBROUTINE easy_exit(status) BIND(C, NAME='exit')
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      INTEGER (C_INT), VALUE, INTENT(IN) :: status
+    ENDSUBROUTINE easy_exit
   ENDINTERFACE
 
-  rv%rng = easy_rng_alloc_c(T%rng_type)
+  WRITE (output_unit, '(A,I3)') 'type id: ', T%id 
+
+  SELECT CASE (T%id)
+        CASE (0)
+                T_c = easy_rng_minstd_rand0_c
+        CASE (1)
+                T_c = easy_rng_minstd_rand_c
+        CASE (2)
+                T_c = easy_rng_mt19937_c
+        CASE (3)
+                T_c = easy_rng_mt19937_64_c
+        CASE (4)
+                T_c = easy_rng_ranlux24_base_c
+        CASE (5)
+                T_c = easy_rng_ranlux48_base_c
+        CASE (6)
+                T_c = easy_rng_ranlux24_c
+        CASE (7)
+                T_c = easy_rng_ranlux48_c
+        CASE (8)
+                T_c = easy_rng_knuth_b_c
+        CASE (9)
+                T_c = easy_rng_default_c
+        CASE DEFAULT
+                WRITE (error_unit, '(A)') 'easy_rng_alloc: Invalid RNG type detected'
+                CALL easy_exit(1)
+  ENDSELECT
+
+  rv%rng = easy_rng_alloc_c(T_c)
 
 ENDFUNCTION easy_rng_alloc
 
@@ -283,39 +336,27 @@ ENDFUNCTION easy_rng_min
 
 !const easy_rng_type ** easy_rng_types_setup (void);
 FUNCTION easy_rng_types_setup() RESULT(RV)
-  TYPE (C_PTR) :: types_c
-  TYPE (C_PTR), POINTER, DIMENSION(:) :: types_c_all
   TYPE (easy_rng_type), POINTER, DIMENSION(:) :: rv
   INTEGER :: length, i
 
-  INTERFACE
-    FUNCTION easy_rng_types_setup_c() BIND(C, NAME='easy_rng_types_setup') RESULT(rv)
-      USE, INTRINSIC :: ISO_C_BINDING
-      IMPLICIT NONE
-      TYPE (C_PTR) :: rv
-    ENDFUNCTION easy_rng_types_setup_c
-  ENDINTERFACE
-
-  length = 0
-
-  types_c = easy_rng_types_setup_c()
-
-  ! start by assuming a very, very long array
-  CALL C_F_POINTER(types_c, types_c_all, [1024])
-  DO i=1, 1024
-    IF (.NOT. C_ASSOCIATED(types_c_all(i))) THEN
-      EXIT
-    ENDIF
-    length = length + 1
-  ENDDO
-
-  CALL C_F_POINTER(types_c, rv, [length])
+  ALLOCATE(rv(10))
+  rv(1) = easy_rng_minstd_rand0
+  rv(2) = easy_rng_minstd_rand
+  rv(3) = easy_rng_mt19937
+  rv(4) = easy_rng_mt19937_64
+  rv(5) = easy_rng_ranlux24_base
+  rv(6) = easy_rng_ranlux48_base
+  rv(7) = easy_rng_ranlux24
+  rv(8) = easy_rng_ranlux48
+  rv(9) = easy_rng_knuth_b
+  rv(10) = easy_rng_default
 
 ENDFUNCTION easy_rng_types_setup
 
 !const easy_rng_type * easy_rng_env_setup (void);
 FUNCTION easy_rng_env_setup() RESULT(rv)
   TYPE (easy_rng_type) :: rv
+  TYPE (C_PTR) :: rv_c
  
   INTERFACE
     FUNCTION easy_rng_env_setup_c() BIND(C, NAME='easy_rng_env_setup') RESULT(rv)
@@ -323,9 +364,41 @@ FUNCTION easy_rng_env_setup() RESULT(rv)
       IMPLICIT NONE
       TYPE (C_PTR) :: rv
     ENDFUNCTION easy_rng_env_setup_c
+
+    SUBROUTINE easy_exit(status) BIND(C, NAME='exit')
+      USE, INTRINSIC :: ISO_C_BINDING
+      IMPLICIT NONE
+      INTEGER (C_INT), VALUE, INTENT(IN) :: status
+    ENDSUBROUTINE easy_exit
   ENDINTERFACE
 
-  rv%rng_type = easy_rng_env_setup_c()
+  rv_c = easy_rng_env_setup_c()
+
+  IF (C_ASSOCIATED(rv_c, easy_rng_minstd_rand0_c)) THEN
+          rv%id = 0
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_minstd_rand_c)) THEN
+          rv%id = 1
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_mt19937_c)) THEN
+          rv%id = 2
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_mt19937_64_c)) THEN
+          rv%id = 3
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_ranlux24_base_c)) THEN
+          rv%id = 4
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_ranlux48_base_c)) THEN
+          rv%id = 5
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_ranlux24_c)) THEN
+          rv%id = 6
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_ranlux48_c)) THEN
+          rv%id = 7
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_knuth_b_c)) THEN
+          rv%id = 8
+  ELSEIF (C_ASSOCIATED(rv_c, easy_rng_default_c)) THEN
+          rv%id = 9
+  ELSE
+          WRITE (error_unit, '(A)') 'easy_rng_setup: unknown RNG type returned'
+          CALL easy_exit(1)
+  ENDIF
+
 
 ENDFUNCTION easy_rng_env_setup
 

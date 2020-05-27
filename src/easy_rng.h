@@ -53,6 +53,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+#ifndef EASYRNG_EXTERN
+	#define EASYRNG_EXTERN extern
+#endif
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct _easy_rng;
 #endif
@@ -79,6 +83,7 @@ typedef struct {
  * \param T The type of a random number generator to use
  * \returns A newly allocated random number generator that has been seeded with the default seed.
  */
+EASYRNG_EXTERN
 easy_rng * easy_rng_alloc (const easy_rng_type * T);
 
 /** Set the current seed.
@@ -87,6 +92,7 @@ easy_rng * easy_rng_alloc (const easy_rng_type * T);
  * \param r The random number generator instance
  * \param s The new seed
  */
+EASYRNG_EXTERN
 void easy_rng_set (const easy_rng * r, unsigned long int s);
 
 /** Frees the memory associated with a random number generator instance
@@ -94,6 +100,7 @@ void easy_rng_set (const easy_rng * r, unsigned long int s);
  * After calling this function, do not attempt to pass the random number generator instance to any other function!
  * \param r The random number generator instance
  */
+EASYRNG_EXTERN
 void easy_rng_free (easy_rng * r);
 
 /** Generate a random, uniformally distributed unsigned long int.
@@ -102,6 +109,7 @@ void easy_rng_free (easy_rng * r);
  * \param r The random number generator instance
  * \returns A unsigned long int
  */
+EASYRNG_EXTERN
 unsigned long int easy_rng_get (const easy_rng * r);
 
 /** Generate a random, uniformally distributed double precision floating point number in the interval [0,1)
@@ -110,6 +118,7 @@ unsigned long int easy_rng_get (const easy_rng * r);
  * \param r The random number generator instance
  * \returns A double precision floating point number between 0 and 1
  */
+EASYRNG_EXTERN
 double easy_rng_uniform (const easy_rng * r);
 
 /** Generate a random, uniformally distributed double precision floating point number in the interval (0,1)
@@ -118,6 +127,7 @@ double easy_rng_uniform (const easy_rng * r);
  * \param r The random number generator instance
  * \returns A double precision floating point number between 0 and 1
  */
+EASYRNG_EXTERN
 double easy_rng_uniform_pos (const easy_rng * r);
 
 /** Generate a random, uniformally distributed unsigned long int in the interval [0, n)
@@ -127,6 +137,7 @@ double easy_rng_uniform_pos (const easy_rng * r);
  * \param n The upper limit (exclusive) of the generated values
  * \returns An unsigned long int between 0 and n-1
  */
+EASYRNG_EXTERN
 unsigned long int easy_rng_uniform_int (const easy_rng * r, unsigned long int n);
 
 /** Return the name of the random generator type as string 
@@ -135,6 +146,7 @@ unsigned long int easy_rng_uniform_int (const easy_rng * r, unsigned long int n)
  * \param r The random number generator instance
  * \returns The name of the random generator type
  */
+EASYRNG_EXTERN
 const char * easy_rng_name (const easy_rng * r);
 
 /** Return the maximum value that can be returned by easy_rng_get()
@@ -143,6 +155,7 @@ const char * easy_rng_name (const easy_rng * r);
  * \param r The random number generator instance
  * \returns The maximum value that can be returned by easy_rng_get()
  */ 
+EASYRNG_EXTERN
 unsigned long int easy_rng_max (const easy_rng * r);
 
 /** Return the minimum value that can be returned by easy_rng_get()
@@ -151,6 +164,7 @@ unsigned long int easy_rng_max (const easy_rng * r);
  * \param r The random number generator instance
  * \returns The minimum value that can be returned by easy_rng_get()
  */ 
+EASYRNG_EXTERN
 unsigned long int easy_rng_min (const easy_rng * r);
 
 /* Not going to happen...
@@ -164,6 +178,7 @@ size_t easy_rng_size (const easy_rng * r);
  * This array must not be freed!
  * \returns the array
  */
+EASYRNG_EXTERN
 const easy_rng_type ** easy_rng_types_setup (void);
 
 /** Set the default seed and/or default random number generator type
@@ -173,6 +188,7 @@ const easy_rng_type ** easy_rng_types_setup (void);
  * to instantiate and seed a new random number generator.
  * \returns easy_rng_default
  */
+EASYRNG_EXTERN
 const easy_rng_type * easy_rng_env_setup (void);
 
 /** Copy the state of a random number generator \c src into another random number generator \c dest
@@ -183,6 +199,7 @@ const easy_rng_type * easy_rng_env_setup (void);
  * \param src The source random number generator
  * \returns 0 on success, -1 on failure
  */
+EASYRNG_EXTERN
 int easy_rng_memcpy (easy_rng * dest, const easy_rng * src);
 
 /** Creates an exact copy of the random number generator \c c.
@@ -192,6 +209,7 @@ int easy_rng_memcpy (easy_rng * dest, const easy_rng * src);
  * \param r The random number generator instance
  * \returns The cloned random number generator
  */
+EASYRNG_EXTERN
 easy_rng * easy_rng_clone (const easy_rng * r);
 
 /** Test if two random number generator instances are identical
@@ -201,6 +219,7 @@ easy_rng * easy_rng_clone (const easy_rng * r);
  * \param rb The second random number generator instance
  * \returns 1 if equal, 0 otherwise
  */
+EASYRNG_EXTERN
 int easy_rng_equal(const easy_rng * ra, const easy_rng *rb);
 
 /** Write the state of the random number generator to a file
@@ -210,6 +229,7 @@ int easy_rng_equal(const easy_rng * ra, const easy_rng *rb);
  * \param r The random number generator instance
  * \returns 0 on success, -1 otherwise
  */
+EASYRNG_EXTERN
 int easy_rng_fwrite (FILE * stream, const easy_rng * r);
 
 /** Read the state of the random number generator from a file
@@ -219,63 +239,75 @@ int easy_rng_fwrite (FILE * stream, const easy_rng * r);
  * \param r The random number generator instance
  * \returns 0 on success, -1 otherwise
  */
+EASYRNG_EXTERN
 int easy_rng_fread (FILE * stream, easy_rng * r);
 
 /** Linear congruential engine, discovered in 1969 by Lewis, Goodman and Miller, adopted as "Minimal standard" in 1988 by Park and Miller 
  */
-extern const easy_rng_type *easy_rng_minstd_rand0;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_minstd_rand0;
 
 /** Linear congruential engine, newer "Minimum standard", recommended by Park, Miller, and Stockmeyer in 1993
  */
-extern const easy_rng_type *easy_rng_minstd_rand;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_minstd_rand;
 
 /** 32-bit Mersenne Twister engine, published by Matsumoto and Nishimura, 1998
  *
  * This is also the type that easy_rng_default maps to, unless overridden by EASY_RNG_TYPE and easy_rng_env_setup() is called.
  * In case of doubt, always use this type.
  */
-extern const easy_rng_type *easy_rng_mt19937;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_mt19937;
 
 /** 64-bit Mersenne Twister engine, published by Matsumoto and Nishimura, 2000
  *
  */
-extern const easy_rng_type *easy_rng_mt19937_64;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_mt19937_64;
 
 /** A subtract with carry engine
  *
  */
-extern const easy_rng_type *easy_rng_ranlux24_base;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_ranlux24_base;
 
 /** A subtract with carry engine
  *
  */
-extern const easy_rng_type *easy_rng_ranlux48_base;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_ranlux48_base;
 
 /** A subtract with carry engine, that discards a certain amount of data produced by the base engine.
  *
  */
-extern const easy_rng_type *easy_rng_ranlux24;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_ranlux24;
 
 /** A subtract with carry engine, that discards a certain amount of data produced by the base engine.
  *
  */
-extern const easy_rng_type *easy_rng_ranlux48;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_ranlux48;
 
 /** A shuffle order engine
  *
  */
-extern const easy_rng_type *easy_rng_knuth_b;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_knuth_b;
 
 /** The default random number generator type
  *
  * Maps by default to easy_rng_mt19937
  */
-extern const easy_rng_type *easy_rng_default;
+EASYRNG_EXTERN
+const easy_rng_type *easy_rng_default;
 
 /** The seed that will be used to initialize newly allocated random number generators
  *
  */
-extern unsigned long int easy_rng_default_seed;
+EASYRNG_EXTERN
+unsigned long int easy_rng_default_seed;
 
 
 #ifdef __cplusplus
