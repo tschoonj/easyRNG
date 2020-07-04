@@ -345,8 +345,14 @@ extern "C" int easy_rng_fwrite (FILE * stream, const easy_rng * r) {
 extern "C" int easy_rng_fread (FILE * stream, easy_rng * r) {
 	size_t length;
 	size_t read = fread(&length, sizeof(size_t), 1, stream);
-	if (read != 1)
+	if (read != 1) {
+		std::cerr << "Error reading length from file" << std::endl;
 		return -1;
+	}
+	else if (length == 0 || length > 8196) {
+		std::cerr << "Invalid length " << length << " read from file" << std::endl;
+		return -1;
+	}
 	char *buffer = (char *) malloc(sizeof(char) * (length + 1));
 	read = fread(buffer, sizeof(char), length, stream);
 	if (read != length) {
