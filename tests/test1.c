@@ -1,7 +1,13 @@
 #include "easy_rng.h"
 #include <stdio.h>
 #include <assert.h>
+
+#ifdef _MSC_VER
+#include <io.h>
+#define unlink _unlink
+#else
 #include <unistd.h>
+#endif
 
 int main(int argc, char *argv[]) {
 	int i;
