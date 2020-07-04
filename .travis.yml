@@ -72,16 +72,16 @@ matrix:
             - g++-9
             - gfortran-9
       env: CC='gcc-9' CXX='g++-9' FC='gfortran-9' CFLAGS='-DNRUNS=100000000'
-    - os: osx
-      osx_image: xcode8.3
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
-    - os: osx
-      osx_image: xcode9.3
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
-    - os: osx
-      osx_image: xcode10.2
-      env: CC='clang' CXX='clang++' CFLAGS='-DNRUNS=100000000' BREW=''
-
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-10
+            - g++-10
+            - gfortran-10
+      env: CC='gcc-10' CXX='g++-10' FC='gfortran-10' CFLAGS='-DNRUNS=100000000'
 env:
   global:
     - LD_LIBRARY_PATH=/usr/local/lib
