@@ -1,0 +1,166 @@
+name: CI
+
+on:
+  #schedule:
+  #  - cron: '0 2 * * *' # run at 2 AM UTC
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  linux:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        image: 
+          - ubuntu:bionic
+          - ubuntu:focal
+          - debian:buster
+            #- centos:7
+            #- centos:8
+            #- fedora:latest
+        cc:
+          - clang
+          - gcc
+        buildsystem:
+          - autotools
+          - meson
+        include:
+          - cc: clang
+            cxx: clang++
+          - cc: gcc
+            cxx: g++
+        exclude:
+          - image: ubuntu:bionic
+            buildsystem: meson
+
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+    - name: Install ubuntu dependencies
+      if: startsWith(matrix.image, 'ubuntu') || startsWith(matrix.image, 'debian')
+      run: |
+        set -ex
+        apt-get --yes --force-yes update
+        apt-get --yes --force-yes install autoconf automake libtool gfortran gcc clang python3-pip python3-wheel python3-setuptools libgsl-dev pkg-config git curl
+        pip3 install meson ninja
+        set +ex
+      env:
+        DEBIAN_FRONTEND: noninteractive
+    - name: Split image names
+      uses: jungwinter/split@v1
+      id: image_splitted
+      with:
+        msg: ${{ matrix.image }}
+        seperator: ':'
+    - name: Install FGSL on ubuntu/debian
+      if: startsWith(matrix.image, 'ubuntu') || startsWith(matrix.image, 'debian')
+      run: |
+        set -ex
+        curl http://xmi-apt.tomschoonjans.eu/xmi.packages.key | apt-key add -
+        echo "deb http://xmi-apt.tomschoonjans.eu/${{ steps.image_splitted.outputs._0 }} ${{ steps.image_splitted.outputs._1 }} stable" >> /etc/apt/sources.list
+        apt-get --yes --force-yes update
+        apt-get --yes --force-yes install libfgsl1-dev
+        set +ex
+      env:
+        DEBIAN_FRONTEND: noninteractive
+    - name: Activate CentOS 8 PowerTools and EPEL and XMI repos
+      if: matrix.image == 'centos:8'
+      run: |
+        set -ex
+        yum update -y
+        yum clean all -y
+        yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        yum install -y http://xmi-yum.tomschoonjans.eu/xmi-repo-key-8.0-1.el8.noarch.rpm
+        dnf install -y 'dnf-command(config-manager)'
+        dnf config-manager --set-enabled PowerTools
+        set +ex
+    - name: Activate CentOS 7 EPEL and XMI repos
+      if: matrix.image == 'centos:7'
+      run: |
+        set -ex
+        yum update -y
+        yum clean all -y
+        yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        yum install -y http://xmi-yum.tomschoonjans.eu/xmi-repo-key-7.0-1.el7.noarch.rpm
+        set +ex
+    - name: Activate Fedora XMI repos
+      if: startsWith(matrix.image, 'fedora')
+      run: |
+        set -ex
+        yum update -y
+        yum clean all -y
+        yum install -y http://xmi-yum.tomschoonjans.eu/xmi-repo-key-fedora.noarch.rpm
+        set +ex
+    - name: Install RHEL dependencies
+      if: startsWith(matrix.image, 'centos') || startsWith(matrix.image, 'fedora')
+      run: |
+        set -ex
+        yum clean all -y
+        yum install -y make autoconf automake libtool gcc-gfortran gcc clang libstdc++-devel gcc-c++ python3-pip gsl-devel pkgconfig git fgsl-devel xz
+        pip3 install meson ninja
+        set +ex
+    # checkout needs to happen later, as git needs to be installed to ensure a clone happens
+    - uses: actions/checkout@v2
+    - name: Primary build and test with Autotools
+      if: matrix.buildsystem == 'autotools'
+      run: |
+        set -ex
+        autoreconf -fi
+        ./configure --enable-fortran || (cat config.log && exit 1)
+        make
+        make distcheck
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
+    - name: Secondary build with Meson
+      if: matrix.buildsystem == 'autotools'
+      run: |
+        set -ex
+        export PATH=${HOME}/.local/bin:${PATH}
+        TARBALL=$(ls *.tar.gz)
+        tar xfz $TARBALL
+        cd ${TARBALL%.tar.gz}
+        mkdir build-meson
+        cd build-meson
+        meson --buildtype=debugoptimized -Dwith-fortran=true ..
+        ninja
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
+    - name: Primary build and test with meson
+      if: matrix.buildsystem == 'meson'
+      run: |
+        set -ex
+        export PATH=${HOME}/.local/bin:${PATH}
+        mkdir build-tmp
+        cd build-tmp
+        meson --buildtype=debugoptimized -Dwith-fortran=true ..
+        ninja
+        ninja dist
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
+    - name: Secondary build with Autotools 
+      if: matrix.buildsystem == 'meson'
+      run: |
+        set -ex
+        cd build-tmp/meson-dist/
+        TARBALL=$(ls *.tar.xz)
+        tar xfJ $TARBALL
+        cd ${TARBALL%.tar.xz}
+        autoreconf -fi
+        ./configure --enable-fortran
+        make
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
