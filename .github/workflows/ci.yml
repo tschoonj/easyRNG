@@ -28,6 +28,76 @@ jobs:
 #        action: test
 #        setup-options: -Dwith-fortran=false
 
+  msys2:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        cc:
+          - clang
+          - gcc
+        buildsystem:
+          - autotools
+          - meson
+        include:
+          - cc: clang
+            cxx: clang++
+          - cc: gcc
+            cxx: g++
+        exclude:
+          - cc: clang
+            buildsystem: autotools
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: msys2/setup-msys2@v1
+      with:
+        update: true
+        install: >
+          base-devel
+          git
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-gcc-fortran
+          mingw-w64-x86_64-gsl
+          mingw-w64-x86_64-libtool
+          mingw-w64-x86_64-meson
+          mingw-w64-x86_64-clang
+          mingw-w64-x86_64-lld
+          mingw-w64-x86_64-fgsl
+          mingw-w64-x86_64-pkg-config
+          automake
+          autoconf
+          make
+          patch
+    - uses: actions/checkout@v2
+    - name: Build and test with Autotools
+      if: matrix.buildsystem == 'autotools'
+      run: |
+        set -ex
+        autoreconf -fi
+        ./configure --enable-fortran || (cat config.log && exit 1)
+        make
+        make distcheck
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
+    - name: Build and test with Meson
+      if: matrix.buildsystem == 'meson'
+      run: |
+        set -ex
+        mkdir build-tmp
+        cd build-tmp
+        meson --buildtype=debugoptimized -Dwith-fortran=true ..
+        ninja
+        ninja dist
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
+
+
   linux:
     timeout-minutes: 60
     strategy:
