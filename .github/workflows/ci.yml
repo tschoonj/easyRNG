@@ -28,6 +28,59 @@ jobs:
 #        action: test
 #        setup-options: -Dwith-fortran=false
 
+  macos:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        cc:
+          - clang
+          - gcc-10
+        buildsystem:
+          - autotools
+          - meson
+        include:
+          - cc: clang
+            cxx: clang++
+          - cc: gcc-10
+            cxx: g++-10
+    runs-on: macos-latest
+    steps:
+    - name: Install homebrew dependencies
+      run: |
+        set -ex
+        brew update
+        brew upgrade
+        brew install autoconf automake libtool gsl wget pkg-config gcc@10 doxygen git meson ninja
+        brew install tschoonj/tap/fgsl
+        set +ex
+    - uses: actions/checkout@v2
+    - name: Build and test with Autotools
+      if: matrix.buildsystem == 'autotools'
+      run: |
+        set -ex
+        autoreconf -fi
+        ./configure --enable-fortran || (cat config.log && exit 1)
+        make
+        make distcheck
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
+    - name: Build and test with Meson
+      if: matrix.buildsystem == 'meson'
+      run: |
+        set -ex
+        mkdir build-tmp
+        cd build-tmp
+        meson --buildtype=debugoptimized -Dwith-fortran=true ..
+        ninja
+        ninja dist
+        set +ex
+      env:
+        CC: ${{matrix.cc}}
+        CXX: ${{matrix.cxx}}
+        LDFLAGS: -L/usr/local/opt/gcc/lib/gcc/10
+
   msys2:
     timeout-minutes: 60
     strategy:
