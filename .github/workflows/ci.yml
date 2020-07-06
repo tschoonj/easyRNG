@@ -159,9 +159,9 @@ jobs:
           - ubuntu:bionic
           - ubuntu:focal
           - debian:buster
-            #- centos:7
-            #- centos:8
-            #- fedora:latest
+          - centos:7
+          - centos:8
+          - fedora:latest
         cc:
           - clang
           - gcc
@@ -169,12 +169,21 @@ jobs:
           - autotools
           - meson
         include:
+          - with_fortran_autotools: enable
+            with_fortran_meson: "true"
           - cc: clang
             cxx: clang++
           - cc: gcc
             cxx: g++
+          - os: centos:7
+            with_fortran_autotools: disable
+            with_fortran_meson: "false"
         exclude:
+          # these builds are excluded as the git they ship is too old to perform a clone,
+          # necessary for meson dist to work
           - image: ubuntu:bionic
+            buildsystem: meson
+          - image: centos:7
             buildsystem: meson
 
     runs-on: ubuntu-latest
@@ -252,7 +261,7 @@ jobs:
       run: |
         set -ex
         autoreconf -fi
-        ./configure --enable-fortran || (cat config.log && exit 1)
+        ./configure --${{ matrix.with_fortran_autotools }}-fortran || (cat config.log && exit 1)
         make
         make distcheck
         set +ex
@@ -269,7 +278,7 @@ jobs:
         cd ${TARBALL%.tar.gz}
         mkdir build-meson
         cd build-meson
-        meson --buildtype=debugoptimized -Dwith-fortran=true ..
+        meson --buildtype=debugoptimized -Dwith-fortran=${{ matrix.with_fortran_meson }} ..
         ninja
         set +ex
       env:
@@ -282,7 +291,7 @@ jobs:
         export PATH=${HOME}/.local/bin:${PATH}
         mkdir build-tmp
         cd build-tmp
-        meson --buildtype=debugoptimized -Dwith-fortran=true ..
+        meson --buildtype=debugoptimized -Dwith-fortran=${{ matrix.with_fortran_meson }} ..
         ninja
         ninja dist
         set +ex
@@ -298,7 +307,7 @@ jobs:
         tar xfJ $TARBALL
         cd ${TARBALL%.tar.xz}
         autoreconf -fi
-        ./configure --enable-fortran
+        ./configure --${{ matrix.with_fortran_autotools }}-fortran
         make
         set +ex
       env:
