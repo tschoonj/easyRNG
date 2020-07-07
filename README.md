@@ -1,3 +1,5 @@
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/tschoonj/easyRNG.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/tschoonj/easyRNG/context:cpp) ![CI](https://github.com/tschoonj/easyRNG/workflows/CI/badge.svg?branch=master&event=push)
+
 # easyRNG
 
 A lightweight and easy-to-use library that wraps C++11's random number generators, making them available from C and Fortran.
@@ -20,9 +22,4 @@ Doxygen was used to generate [documentation](https://tschoonj.github.io/easyRNG)
 See the [installation instructions](https://tschoonj.github.io/easyRNG/installation_instructions.html) on how to obtain a copy of easyRNG. Source tarballs are available, as well as binary packages for several Linux distributions.
 
 That's it! Don't hesitate to open an issue if something does not work as it's supposed to...
-
-
-
-
-[![Build status](https://ci.appveyor.com/api/projects/status/q3aj9obkyswj2smv?svg=true)](https://ci.appveyor.com/project/tschoonj/easyrng)  [![Build Status](https://travis-ci.org/tschoonj/easyRNG.svg?branch=master)](https://travis-ci.org/tschoonj/easyRNG) [![Build Status](https://dev.azure.com/TomSchoonjans/easyRNG/_apis/build/status/Azure%20Pipelines?branchName=master)](https://dev.azure.com/TomSchoonjans/easyRNG/_build/latest?definitionId=2&branchName=master)
 

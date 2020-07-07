@@ -16,6 +16,8 @@ current = lib_current + 1
 interface_age = lib_revision
 darwin_versions = [current, '@0@.@1@'.format(current , interface_age)]
 
+cc = meson.get_compiler('c')
+
 gsl_dep = dependency('gsl', version: '>=1.13', required:false)
 
 pkgconfig = import('pkgconfig')

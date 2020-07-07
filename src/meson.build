@@ -12,6 +12,12 @@ install_headers(headers, subdir: 'easyRNG')
 
 easyRNG_sources = headers + private_headers + sources
 
-easyRNG_lib = library('easyRNG', easyRNG_sources, version: version, darwin_versions: darwin_versions, install: true)
+cpp_args = []
+
+if cc.get_id() == 'msvc'
+  cpp_args += '/std:c++latest'
+endif
+
+easyRNG_lib = library('easyRNG', easyRNG_sources, version: version, darwin_versions: darwin_versions, install: true, cpp_args: cpp_args)
 
 easyRNG_lib_dep = declare_dependency(link_with: easyRNG_lib, include_directories: include_directories('.'))
