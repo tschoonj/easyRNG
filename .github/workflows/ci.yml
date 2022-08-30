@@ -14,18 +14,34 @@ jobs:
   visual-studio:
     timeout-minutes: 60
     runs-on: windows-latest
-
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+        compiler:
+          - cl
+          - clang-cl
+          - clang
+    name: Visual Studio with ${{matrix.compiler}} and Python ${{ matrix.python-version }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-      - uses: ilammy/msvc-dev-cmd@v1
-      - uses: BSFishy/meson-build@v1.0.1
-        with:
-          action: test
-          # setup-options: -Dwith-fortran=false
+    - uses: actions/checkout@v3
+    - uses: conda-incubator/setup-miniconda@v2.1.1
+      with:
+        auto-update-conda: true
+        channels: conda-forge
+        python-version: ${{ matrix.python-version }}
+    - name: Install meson, ninja, numpy and cython
+      run: |
+        conda install -q -y meson ninja clang m2w64-gcc-fortran
+    - uses: ilammy/msvc-dev-cmd@v1.11.0
+    - name: Build with meson
+      run: |
+        meson setup meson-build --buildtype=release -Dwith-fortran=true
+        meson compile -C meson-build
+        meson test -C meson-build
+        # ninja -v -C meson-build dist
+      env:
+        CC: ${{ matrix.compiler }}
+        CXX: ${{ matrix.compiler }}
 
   macos:
     timeout-minutes: 60
